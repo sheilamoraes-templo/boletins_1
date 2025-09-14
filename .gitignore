@@ -1,0 +1,28 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+*.pid
+*.gz
+*.egg-info/
+.pytest_cache/
+
+# Envs
+.venv/
+.env
+.env.*
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Projeto runtime
+outputs/
+logs/
+cache/
+
+# Sistema
+.DS_Store
+Thumbs.db
