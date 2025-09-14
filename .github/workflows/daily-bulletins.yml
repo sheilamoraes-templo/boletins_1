@@ -1,0 +1,55 @@
+name: Boletins IA - Execução Diária
+
+on:
+  schedule:
+    # Executa diariamente às 13:00 (horário de Brasília)
+    - cron: '0 16 * * *'  # 16:00 UTC = 13:00 BRT
+  workflow_dispatch:  # Permite execução manual
+
+jobs:
+  generate-bulletins:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+      
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Instalar dependências
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Executar pipeline completo
+      env:
+        OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+        SMTP_PORT: ${{ secrets.SMTP_PORT }}
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        EMAIL_RECIPIENTS: ${{ secrets.EMAIL_RECIPIENTS }}
+      run: |
+        python pipeline.py << EOF
+        1
+        EOF
+        
+    - name: Upload resultados
+      uses: actions/upload-artifact@v3
+      with:
+        name: boletins-${{ github.run_number }}
+        path: |
+          outputs/
+          logs/
+        retention-days: 30
+        
+    - name: Commit e push resultados
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add outputs/ logs/
+        git diff --staged --quiet || git commit -m "Boletins gerados automaticamente - ${{ github.run_number }}"
+        git push

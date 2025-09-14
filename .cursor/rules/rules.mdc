@@ -1,0 +1,41 @@
+---
+description: Regras do workspace e do assistente para este repositório
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+### Diretrizes gerais
+
+- Responder sempre em português (pt-BR).
+- Não usar emojis.
+- Não executar commits, pushes ou abrir PRs sem solicitação explícita do usuário. Antes de rodar qualquer comando ou script, confirmar em chat.
+
+### Gestão de arquivos e testes
+
+- Evitar criar múltiplas versões do mesmo arquivo.
+- Exceção controlada: quando for necessário criar variações temporárias para testes/experimentos de curta duração, usar sufixo numérico simples no mesmo diretório do arquivo original (ex.: `pipeline2.py`, `pipeline3.py`).
+  - Convenção: manter o arquivo principal como `nome.py` e numerar apenas as variações (`nome2.py`, `nome3.py`, ...). Sempre usar o próximo inteiro disponível.
+  - Escopo: usar apenas para testes rápidos e controlados; não promover para produção.
+  - Vigência: a variação com o maior número é considerada a versão de teste vigente.
+  - Consolidação: após validação, consolidar as mudanças no arquivo original e remover as variações numeradas.
+  - Testes: não criar variações de arquivos de teste. Reutilizar o mesmo arquivo de testes do alvo (parametrizando ou apontando para a variação quando necessário).
+- Para cada arquivo .py, manter exatamente um arquivo de teste associado. Reutilizar e atualizar esse mesmo arquivo ao adicionar/alterar testes. Não criar novos arquivos de teste para o mesmo alvo.
+- Aplicar a mesma regra a pipelines e demais scripts .py: atualizar o arquivo existente em vez de criar variantes/duplicatas (salvo a exceção controlada acima).
+
+### OpenRouter (segurança)
+
+- Em todo script que usar a chave do OpenRouter, invocar a camada de proteção do OpenRouter no próprio script (importar e inicializar a proteção no mesmo arquivo que faz as chamadas).
+- Carregar a chave apenas via variáveis de ambiente/segredos. Nunca versionar chaves ou expor em logs.
+
+### Arquitetura e organização
+
+- Manter arquitetura limpa, modular e com responsabilidades separadas. Organizar arquivos por domínio/feature e evitar acoplamento e duplicação desnecessários.
+
+### Processo e clarificações
+
+- Quando algo estiver ambíguo ou caso seja necessário, pedir esclarecimentos antes de mudanças estruturais ou ações destrutivas.
+
+### MCP
+
+- Prioritar o uso do MCP context 7 sempre que disponível. Se indisponível, avisar no chat e usar a melhor alternativa segura.

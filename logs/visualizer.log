@@ -1,0 +1,40 @@
+2025-09-14 00:54:17,664 - __main__ - INFO - Template não encontrado, criando...
+2025-09-14 00:54:17,667 - __main__ - INFO - Template HTML criado com sucesso
+2025-09-14 00:54:17,687 - __main__ - INFO - Visualizador inicializado em 127.0.0.1:5000
+2025-09-14 00:54:17,687 - __main__ - INFO - Iniciando servidor web em 127.0.0.1:5000
+2025-09-14 00:54:17,935 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-14 00:54:17,935 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-14 00:54:30,983 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:54:30] "GET / HTTP/1.1" 200 -
+2025-09-14 00:54:33,551 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:54:33] "GET /api/stats HTTP/1.1" 200 -
+2025-09-14 00:54:33,655 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:54:33] "GET /api/bulletins HTTP/1.1" 200 -
+2025-09-14 00:54:35,117 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:54:35] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-09-14 00:54:39,214 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:54:39] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-14 00:54:39,934 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:54:39] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-14 00:54:40,649 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:54:40] "GET /api/pipeline_results HTTP/1.1" 200 -
+2025-09-14 00:55:01,141 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:55:01] "GET /api/bulletins HTTP/1.1" 200 -
+2025-09-14 00:55:01,141 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:55:01] "GET /api/stats HTTP/1.1" 200 -
+2025-09-14 00:55:24,757 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:55:24] "GET /api/bulletins HTTP/1.1" 200 -
+2025-09-14 00:55:24,759 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:55:24] "GET /api/stats HTTP/1.1" 200 -
+2025-09-14 00:55:27,232 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:55:27] "GET /api/bulletins HTTP/1.1" 200 -
+2025-09-14 00:55:27,763 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:55:27] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-14 00:55:31,127 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:55:31] "GET /api/bulletins HTTP/1.1" 200 -
+2025-09-14 00:55:31,127 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 00:55:31] "GET /api/stats HTTP/1.1" 200 -
+2025-09-14 01:11:53,525 - __main__ - INFO - Template já existe, usando existente
+2025-09-14 01:11:53,530 - __main__ - INFO - Visualizador inicializado em 127.0.0.1:5000
+2025-09-14 01:11:53,530 - __main__ - INFO - Iniciando servidor web em 127.0.0.1:5000
+2025-09-14 01:11:55,643 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-14 01:11:55,644 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-14 01:12:19,649 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:12:19] "GET / HTTP/1.1" 200 -
+2025-09-14 01:12:20,860 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:12:20] "GET /api/bulletins HTTP/1.1" 200 -
+2025-09-14 01:12:20,931 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:12:20] "GET /api/stats HTTP/1.1" 200 -
+2025-09-14 01:12:29,013 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:12:29] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-14 01:12:31,993 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:12:31] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-14 01:12:33,093 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:12:33] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-14 01:12:49,871 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:12:49] "GET /api/bulletins HTTP/1.1" 200 -
+2025-09-14 01:12:49,935 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:12:49] "GET /api/stats HTTP/1.1" 200 -
+2025-09-14 01:13:19,869 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:13:19] "GET /api/bulletins HTTP/1.1" 200 -
+2025-09-14 01:13:19,924 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:13:19] "GET /api/stats HTTP/1.1" 200 -
+2025-09-14 01:13:49,868 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:13:49] "GET /api/bulletins HTTP/1.1" 200 -
+2025-09-14 01:13:49,927 - werkzeug - INFO - 127.0.0.1 - - [14/Sep/2025 01:13:49] "GET /api/stats HTTP/1.1" 200 -

@@ -1,0 +1,20 @@
+# Dependências do projeto Boletins IA
+
+# Coleta de notícias
+feedparser==6.0.10
+requests==2.31.0
+beautifulsoup4==4.12.2
+lxml==4.9.3
+
+# Interface web
+flask==3.0.0
+flask-cors==4.0.0
+
+# Utilitários
+python-dateutil==2.8.2
+python-dotenv==1.0.1
+
+# Email e IMAP
+# (imaplib é da stdlib)
+
+# Desenvolvimento

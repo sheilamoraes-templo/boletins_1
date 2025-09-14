@@ -1,0 +1,54 @@
+# Arquivo de exemplo de configuração de variáveis de ambiente
+# Copie este arquivo para .env e configure suas variáveis
+
+# =============================================================================
+# CONFIGURAÇÕES OBRIGATÓRIAS
+# =============================================================================
+
+# Chave da API OpenRouter (obrigatória para geração de boletins)
+# Obtenha sua chave em: https://openrouter.ai/
+OPENROUTER_API_KEY=sk-or-v1-sua-chave-aqui
+
+# =============================================================================
+# CONFIGURAÇÕES DE EMAIL (OPCIONAIS)
+# =============================================================================
+
+# Servidor SMTP (exemplo para Gmail)
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+
+# Credenciais de email
+EMAIL_USER=seu-email@gmail.com
+EMAIL_PASSWORD=sua-senha-de-app
+
+# Lista de destinatários (separados por vírgula)
+EMAIL_RECIPIENTS=destinatario1@email.com,destinatario2@email.com
+
+# =============================================================================
+# CONFIGURAÇÕES AVANÇADAS (OPCIONAIS)
+# =============================================================================
+
+# Período de coleta em dias (padrão: 5)
+# DAYS_BACK=5
+
+# Máximo de artigos por fonte (padrão: 50)
+# MAX_ARTICLES_PER_SOURCE=50
+
+# Máximo de artigos por segmento (padrão: 15)
+# MAX_ARTICLES_PER_SEGMENT=15
+
+# Modelo de IA (padrão: google/gemini-2.0-flash-exp)
+# GEMINI_MODEL=google/gemini-2.0-flash-exp
+
+# Máximo de tokens para geração (padrão: 4000)
+# MAX_TOKENS=4000
+
+# Temperatura de geração (padrão: 0.7)
+# TEMPERATURE=0.7
+
+# =============================================================================
+# INSTRUÇÕES
+# =============================================================================
+# 1. crie .env e preencha as chaves
+# 2. o uso do OpenRouter é protegido por rate limiter interno
+# 3. rode: python pipeline.py
