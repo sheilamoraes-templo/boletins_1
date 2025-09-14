@@ -4,3 +4,6 @@
 2025-09-14 01:24:16,578 - __main__ - INFO - Iniciando segmentação de 117 itens
 2025-09-14 01:24:16,912 - __main__ - INFO - Segmentação concluída
 2025-09-14 01:24:16,949 - __main__ - INFO - Resultados da segmentação salvos em: outputs/segmentation_20250914_012416.json
+2025-09-14 01:45:39,635 - __main__ - INFO - Iniciando segmentação de 117 itens
+2025-09-14 01:45:40,820 - __main__ - INFO - Segmentação concluída
+2025-09-14 01:45:41,104 - __main__ - INFO - Resultados da segmentação salvos em: outputs/segmentation_20250914_014540.json

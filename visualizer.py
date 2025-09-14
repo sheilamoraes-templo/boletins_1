@@ -932,6 +932,8 @@ def create_html_template():
                 const data = result.data;
                 const stats = data.stats || {};
                 const segmentsStats = stats.segments_stats || {};
+                const segmented = (data.segmented_results || {});
+                const selection = (data.selection_by_segment || {});
                 
                 let html = `
                     <div class="stats-grid">
@@ -943,37 +945,79 @@ def create_html_template():
                         <div class="stat-card">
                             <h3>Após Filtros</h3>
                             <div class="value">${stats.filtered_articles || 0}</div>
-                            <div class="label">artigos filtrados</div>
+                            <div class="label">artigos válidos</div>
                         </div>
                     </div>
-                    <h4>Distribuição por Segmento</h4>
+                    <h4 style="margin-top:20px;">Distribuição por Segmento</h4>
                     <div class="stats-grid">
                 `;
                 
                 const segmentNames = {
-                    'tecnologia': 'Tecnologia',
-                    'marketing': 'Marketing',
-                    'direito_corporativo': 'Direito Corporativo',
+                    'marketing_comunicacao_jornalismo': 'Marketing, Comunicação e Jornalismo',
+                    'direito_corporativo_tributario_trabalhista': 'Direito Corporativo, Tributário, Trabalhista',
+                    'recursos_humanos_gestao_pessoas': 'Recursos Humanos e Gestão de Pessoas',
                     'outros': 'Outros'
                 };
                 
                 Object.keys(segmentsStats).forEach(segment => {
                     const count = segmentsStats[segment];
                     const displayName = segmentNames[segment] || segment;
-                    const color = segment === 'tecnologia' ? '#28a745' : 
-                                 segment === 'marketing' ? '#dc3545' :
-                                 segment === 'direito_corporativo' ? '#6f42c1' : '#6c757d';
-                    
                     html += `
-                        <div class="stat-card" style="border-left-color: ${color};">
+                        <div class="stat-card">
                             <h3>${displayName}</h3>
                             <div class="value">${count}</div>
                             <div class="label">artigos</div>
                         </div>
                     `;
                 });
-                
                 html += '</div>';
+                
+                // Listagem detalhada por segmento (todas as notícias)
+                html += `<h4 style="margin-top:20px;">Notícias por Segmento (todas as coletadas)</h4>`;
+                Object.keys(segmentNames).forEach(segKey => {
+                    const list = segmented[segKey] || [];
+                    if (!list.length) return;
+                    html += `<div class="stat-card" style="margin-bottom:15px;">
+                                <h3>${segmentNames[segKey]} — ${list.length} artigos</h3>
+                                <ul style="margin-top:10px;">`;
+                    list.slice(0,300).forEach(a => {
+                        const t = (a.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                        const u = a.url || '#';
+                        const src = a.source || '';
+                        const dt = a.published || '';
+                        const snippet = (a.content||'').slice(0,800).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                        html += `<li style="margin-bottom:8px;">
+                                    <a href="${u}" target="_blank">${t}</a>
+                                    <div style="font-size:12px;color:#666;">Fonte: ${src} • Data: ${dt}</div>
+                                    ${snippet ? `<details style="margin-top:4px;"><summary>ver conteúdo</summary><div style="margin-top:6px;">${snippet}...</div></details>` : ''}
+                                 </li>`;
+                    });
+                    html += `</ul></div>`;
+                });
+                
+                // Top 15 por segmento (selection_by_segment)
+                html += `<h4 style="margin-top:20px;">Top 15 por Segmento (seleção para boletins)</h4>`;
+                Object.keys(segmentNames).forEach(segKey => {
+                    const list = selection[segKey] || [];
+                    if (!list.length) return;
+                    html += `<div class="stat-card" style="margin-bottom:15px; border-left-color:#28a745;">
+                                <h3>${segmentNames[segKey]} — ${list.length} selecionados</h3>
+                                <ul style="margin-top:10px;">`;
+                    list.forEach(a => {
+                        const t = (a.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                        const u = a.url || '#';
+                        const src = a.source || '';
+                        const dt = a.published || '';
+                        const snippet = (a.content||'').slice(0,800).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                        html += `<li style="margin-bottom:8px;">
+                                    <a href="${u}" target="_blank">${t}</a>
+                                    <div style="font-size:12px;color:#666;">Fonte: ${src} • Data: ${dt}</div>
+                                    ${snippet ? `<details style="margin-top:4px;"><summary>ver conteúdo</summary><div style="margin-top:6px;">${snippet}...</div></details>` : ''}
+                                 </li>`;
+                    });
+                    html += `</ul></div>`;
+                });
+                
                 container.innerHTML = html;
                 
             } catch (error) {
@@ -1112,13 +1156,9 @@ def create_html_template():
 def start_visualizer(host: str = '127.0.0.1', port: int = 5000, debug: bool = False):
     """Inicia o visualizador web"""
     try:
-        # Cria template HTML apenas se não existir
-        template_path = f'{Config.TEMPLATES_DIR}/index.html'
-        if not os.path.exists(template_path):
-            logger.info("Template não encontrado, criando...")
-            create_html_template()
-        else:
-            logger.info("Template já existe, usando existente")
+        # Sempre recria o template HTML para refletir alterações
+        logger.info("(Re)criando template HTML...")
+        create_html_template()
         
         # Inicia visualizador
         visualizer = BoletinsVisualizer(host, port)

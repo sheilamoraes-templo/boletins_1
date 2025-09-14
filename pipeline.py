@@ -24,7 +24,7 @@ class BoletinsPipeline:
     def __init__(self):
         self.collector = NewsCollector()
         self.segmenter = NewsSegmenter()
-        self.generator = BulletinGenerator()
+        self.generator = None  # instanciado somente quando necessário
         self.email_sender = EmailSender() if Config.EMAIL_CONFIG['email_user'] else None
         
         # Estatísticas do pipeline
@@ -111,6 +111,10 @@ class BoletinsPipeline:
             # FASE 3: GERAÇÃO DE BOLETINS
             logger.info(f"\n{'='*20} FASE 3: GERAÇÃO DE BOLETINS {'='*20}")
             generation_start = time.time()
+
+            # inicializa gerador apenas aqui (exige OPENROUTER_API_KEY)
+            if self.generator is None:
+                self.generator = BulletinGenerator()
             
             generation_result = self.generator.generate_bulletins(segmented_results)
             
@@ -275,6 +279,10 @@ class BoletinsPipeline:
             
             logger.info(f"Carregados dados de segmentação com {len(segmented_results)} segmentos")
             
+            # inicializa gerador aqui (exige OPENROUTER_API_KEY)
+            if self.generator is None:
+                self.generator = BulletinGenerator()
+            
             # Executa geração
             result = self.generator.generate_bulletins(segmented_results)
             
@@ -427,11 +435,6 @@ def main():
     
     # Cria diretórios necessários
     Config.create_directories()
-    
-    # Valida configuração
-    if not Config.validate_config():
-        print("❌ Configuração inválida. Verifique as variáveis de ambiente.")
-        return
     
     try:
         escolha = input("Digite sua escolha (1-5): ").strip()
