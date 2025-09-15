@@ -20,14 +20,15 @@ class NewsSegmenter:
         self.segments_config = Config.SEGMENTS
         self.blocked = [k.lower() for k in Config.BLOCKED_KEYWORDS]
         self.ai_keywords = [k.lower() for k in Config.AI_KEYWORDS]
+        # Reforço: se não passar por IA primeiro, classificar como 'descartado' logo
         # Pesos e parâmetros do ranking
         self.weights = {
             'ia': 0.35,
-            'segment': 0.35,
+            'segment': 0.40,
             'fresh': 0.15,
             'source': 0.10,
         }
-        self.domain_caps = 4  # máximo por domínio inicialmente
+        self.domain_caps = 3  # reduzir para mais diversidade
         self.similarity_threshold = 0.9  # similaridade de título para descartar
         self.source_score = {
             'g1.globo.com': 0.9,

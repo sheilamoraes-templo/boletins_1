@@ -307,6 +307,38 @@ class NewsCollector:
         except Exception as e:
             logger.error(f"Erro ao salvar resultados: {e}")
 
+    def _passes_ia_and_blocked_filters(self, item: dict) -> bool:
+        from config import Config
+        ai_terms = [k.lower() for k in Config.AI_KEYWORDS]
+        blocked = [k.lower() for k in Config.BLOCKED_KEYWORDS]
+        text = ' '.join([item.get('title',''), item.get('summary',''), item.get('content','')]).lower()
+        if Config.COLLECT_IA_ONLY and not any(k in text for k in ai_terms):
+            return False
+        if any(b in text for b in blocked):
+            return False
+        return True
+
+    def _postprocess_items(self, items: list) -> list:
+        cleaned = []
+        seen_urls = set()
+        seen_titles = set()
+        for it in items:
+            if not self._passes_ia_and_blocked_filters(it):
+                continue
+            url = it.get('url')
+            title = (it.get('title') or '').strip()
+            if not url or not title:
+                continue
+            if url in seen_urls:
+                continue
+            norm_title = self._normalize_title(title)
+            if norm_title in seen_titles:
+                continue
+            seen_urls.add(url)
+            seen_titles.add(norm_title)
+            cleaned.append(it)
+        return cleaned
+
 def main():
     """Função principal para testar o coletor"""
     print("COLETOR DE NOTÍCIAS IA")
@@ -326,7 +358,7 @@ def main():
     Config.create_directories()
     
     # Valida configuração
-    if not Config.validate_config():
+    if not Config.validate_config(require_api=False):
         print("❌ Configuração inválida. Verifique as variáveis de ambiente.")
         return
     

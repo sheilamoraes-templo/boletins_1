@@ -12,6 +12,7 @@ from flask import Flask, render_template, jsonify, request, Response
 from flask_cors import CORS
 
 from config import Config
+from email_sender import EmailSender
 
 logger = logging.getLogger(__name__)
 
@@ -46,9 +47,81 @@ class BoletinsVisualizer:
                 latest_file = f"{Config.OUTPUT_DIR}/latest_pipeline.json"
                 
                 if not os.path.exists(latest_file):
+                    # Fallback: sintetiza relatório a partir de arquivos existentes
+                    collection_file = f"{Config.OUTPUT_DIR}/latest_collection.json"
+                    segmentation_file = f"{Config.OUTPUT_DIR}/latest_segmentation.json"
+                    bulletins_file = f"{Config.OUTPUT_DIR}/latest_bulletins.json"
+                    collection = {}
+                    segmentation = {}
+                    bulletins = {}
+                    if os.path.exists(collection_file):
+                        try:
+                            with open(collection_file, 'r', encoding='utf-8') as f:
+                                collection = json.load(f)
+                        except Exception:
+                            collection = {}
+                    if os.path.exists(segmentation_file):
+                        try:
+                            with open(segmentation_file, 'r', encoding='utf-8') as f:
+                                segmentation = json.load(f)
+                        except Exception:
+                            segmentation = {}
+                    if os.path.exists(bulletins_file):
+                        try:
+                            with open(bulletins_file, 'r', encoding='utf-8') as f:
+                                bulletins = json.load(f)
+                        except Exception:
+                            bulletins = {}
+
+                    bulletins_map = bulletins.get('bulletins', {}) if isinstance(bulletins, dict) else {}
+                    successful_bulletins = 0
+                    segments_stats = {}
+                    if bulletins_map:
+                        for seg_key, info in bulletins_map.items():
+                            if isinstance(info, dict) and info.get('status') == 'success':
+                                successful_bulletins += 1
+                                # Conta artigos usados por segmento
+                                segments_stats[seg_key] = info.get('articles_count', 0)
+
+                    # Determina status
+                    if successful_bulletins > 0:
+                        status = 'success'
+                    elif segmentation:
+                        status = 'partial'
+                    elif collection:
+                        status = 'partial'
+                    else:
+                        status = 'no_data'
+
+                    # Data de execução (usa o mais recente dos arquivos disponíveis)
+                    times = []
+                    for p in [collection_file, segmentation_file, bulletins_file]:
+                        if os.path.exists(p):
+                            try:
+                                times.append(datetime.fromtimestamp(os.path.getmtime(p)))
+                            except Exception:
+                                pass
+                    execution_date = (max(times).isoformat() if times else datetime.now().isoformat())
+
+                    # Monta resposta compatível
+                    data = {
+                        'status': status,
+                        'summary': {
+                            'execution_time': 0,
+                            'bulletins_generated': successful_bulletins,
+                        },
+                        'pipeline_stats': {
+                            'collected_articles': (collection.get('stats', {}) or {}).get('ai_articles', 0),
+                            'segmented_articles': (segmentation.get('segmentation', {}) or {}).get('total', None) or (segmentation.get('stats', {}) or {}).get('total_articles', 0),
+                            'segments_stats': segments_stats
+                        },
+                        'execution_date': execution_date
+                    }
+
                     return jsonify({
-                        'success': False,
-                        'error': 'Nenhum resultado de pipeline encontrado'
+                        'success': True,
+                        'data': data,
+                        'timestamp': datetime.now().isoformat()
                     })
                 
                 with open(latest_file, 'r', encoding='utf-8') as f:
@@ -241,7 +314,8 @@ class BoletinsVisualizer:
                         'formatted_text': formatted_text,
                         'html_content': html_content,
                         'status': 'success',
-                        'selected_articles': bulletin_info.get('selected_articles', [])
+                        'selected_articles': bulletin_info.get('selected_articles', []),
+                        'article_summaries': bulletin_info.get('article_summaries', [])
                     }
                 })
                 
@@ -261,6 +335,7 @@ class BoletinsVisualizer:
                     'segmentation_stats': self._get_segmentation_stats(),
                     'generation_stats': self._get_generation_stats(),
                     'pipeline_stats': self._get_pipeline_stats(),
+                    'source_quality': self._get_source_quality(),
                     'timestamp': datetime.now().isoformat()
                 }
                 
@@ -275,6 +350,26 @@ class BoletinsVisualizer:
                     'success': False,
                     'error': str(e)
                 }), 500
+
+        @self.app.route('/api/email/send-latest', methods=['POST'])
+        def send_latest_email():
+            """Envia por email os últimos boletins gerados"""
+            try:
+                latest_file = f"{Config.OUTPUT_DIR}/latest_bulletins.json"
+                if not os.path.exists(latest_file):
+                    return jsonify({'success': False, 'error': 'Nenhum boletim encontrado'}), 404
+                with open(latest_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                try:
+                    sender = EmailSender()
+                except Exception as e:
+                    return jsonify({'success': False, 'error': f'Configuração de email inválida: {e}'}), 400
+                result = sender.send_bulletins(data)
+                if result.get('status') == 'success':
+                    return jsonify({'success': True, 'result': result})
+                return jsonify({'success': False, 'error': result.get('error','Erro no envio')}), 500
+            except Exception as e:
+                return jsonify({'success': False, 'error': str(e)}), 500
     
     def _get_collection_stats(self) -> Dict[str, Any]:
         """Obtém estatísticas da coleta"""
@@ -322,6 +417,42 @@ class BoletinsVisualizer:
                 return data.get('pipeline_stats', {})
             return {}
         except:
+            return {}
+
+    def _get_source_quality(self) -> Dict[str, Any]:
+        """Calcula métricas de qualidade por fonte: coletados vs selecionados Top15"""
+        try:
+            latest_collection = f"{Config.OUTPUT_DIR}/latest_collection.json"
+            latest_selection = f"{Config.OUTPUT_DIR}/latest_selection.json"
+            collected_by_source = {}
+            selected_by_source = {}
+            if os.path.exists(latest_collection):
+                with open(latest_collection, 'r', encoding='utf-8') as f:
+                    col = json.load(f)
+                for art in col.get('articles', []):
+                    src = art.get('source', 'Desconhecida')
+                    collected_by_source[src] = collected_by_source.get(src, 0) + 1
+            if os.path.exists(latest_selection):
+                with open(latest_selection, 'r', encoding='utf-8') as f:
+                    sel = json.load(f)
+                selection = sel.get('selection_by_segment', {})
+                for seg_list in selection.values():
+                    for art in seg_list or []:
+                        src = art.get('source', 'Desconhecida')
+                        selected_by_source[src] = selected_by_source.get(src, 0) + 1
+            sources = set().union(collected_by_source.keys(), selected_by_source.keys())
+            quality = {}
+            for src in sorted(sources):
+                collected = collected_by_source.get(src, 0)
+                selected = selected_by_source.get(src, 0)
+                rate = (selected / collected) if collected else 0.0
+                quality[src] = {
+                    'collected': collected,
+                    'selected_top15': selected,
+                    'selection_rate': round(rate, 3)
+                }
+            return quality
+        except Exception:
             return {}
     
     def _convert_text_to_html(self, text):
@@ -674,38 +805,50 @@ def create_html_template():
         
         <div class="tabs">
             <div class="tab-headers">
-                <div class="tab-header active" onclick="showTab('bulletins')">Boletins</div>
-                <div class="tab-header" onclick="showTab('collection')">Coleta</div>
-                <div class="tab-header" onclick="showTab('segmentation')">Segmentação</div>
-                <div class="tab-header" onclick="showTab('pipeline')">Pipeline</div>
+                <div class="tab-header active" onclick="showTab('collection', this)">Coleta</div>
+                <div class="tab-header" onclick="showTab('direito', this)">Direito</div>
+                <div class="tab-header" onclick="showTab('comunicacao', this)">Comunicação</div>
+                <div class="tab-header" onclick="showTab('rh', this)">RH</div>
+                <div class="tab-header" onclick="showTab('pipeline', this)">Pipeline</div>
+                <div class="tab-header" onclick="showTab('email', this)">Email</div>
             </div>
             
             <div class="tab-content">
-                <div id="bulletins" class="tab-panel active">
-                    <h3>Boletins Gerados</h3>
-                    <div id="bulletinsList" class="bulletins-list">
-                        <div class="loading">Carregando boletins...</div>
-                    </div>
-                </div>
-                
-                <div id="collection" class="tab-panel">
+                <div id="collection" class="tab-panel active">
                     <h3>Resultados da Coleta</h3>
                     <div id="collectionResults">
                         <div class="loading">Carregando dados de coleta...</div>
                     </div>
                 </div>
                 
-                <div id="segmentation" class="tab-panel">
-                    <h3>Resultados da Segmentação</h3>
-                    <div id="segmentationResults">
-                        <div class="loading">Carregando dados de segmentação...</div>
-                    </div>
+                <div id="direito" class="tab-panel">
+                    <h3>Direito Corporativo, Tributário, Trabalhista</h3>
+                    <div id="direitoContent"><div class="loading">Carregando...</div></div>
+                </div>
+                
+                <div id="comunicacao" class="tab-panel">
+                    <h3>Marketing, Comunicação e Jornalismo</h3>
+                    <div id="comunicacaoContent"><div class="loading">Carregando...</div></div>
+                </div>
+                
+                <div id="rh" class="tab-panel">
+                    <h3>Recursos Humanos e Gestão de Pessoas</h3>
+                    <div id="rhContent"><div class="loading">Carregando...</div></div>
                 </div>
                 
                 <div id="pipeline" class="tab-panel">
                     <h3>Resultados do Pipeline</h3>
                     <div id="pipelineResults">
                         <div class="loading">Carregando dados do pipeline...</div>
+                    </div>
+                </div>
+                
+                <div id="email" class="tab-panel">
+                    <h3>Envio por Email</h3>
+                    <div>
+                        <p>Enviar os últimos boletins gerados para os destinatários configurados.</p>
+                        <button class="btn btn-primary" onclick="sendEmail()">Enviar últimos boletins por email</button>
+                        <div id="emailResult" style="margin-top:10px;"></div>
                     </div>
                 </div>
             </div>
@@ -723,7 +866,7 @@ def create_html_template():
     <script>
         let currentData = null;
         
-        function showTab(tabName) {
+        function showTab(tabName, el) {
             // Remove active class from all headers and panels
             document.querySelectorAll('.tab-header').forEach(header => {
                 header.classList.remove('active');
@@ -733,7 +876,7 @@ def create_html_template():
             });
             
             // Add active class to selected tab
-            event.target.classList.add('active');
+            if (el) { el.classList.add('active'); }
             document.getElementById(tabName).classList.add('active');
             
             // Load data for the tab
@@ -742,17 +885,22 @@ def create_html_template():
         
         function loadTabData(tabName) {
             switch(tabName) {
-                case 'bulletins':
-                    loadBulletins();
-                    break;
                 case 'collection':
                     loadCollectionData();
                     break;
-                case 'segmentation':
-                    loadSegmentationData();
+                case 'direito':
+                    loadSegmentTab('direito_corporativo_tributario_trabalhista', 'direitoContent');
+                    break;
+                case 'comunicacao':
+                    loadSegmentTab('marketing_comunicacao_jornalismo', 'comunicacaoContent');
+                    break;
+                case 'rh':
+                    loadSegmentTab('recursos_humanos_gestao_pessoas', 'rhContent');
                     break;
                 case 'pipeline':
                     loadPipelineData();
+                    break;
+                case 'email':
                     break;
             }
         }
@@ -825,16 +973,39 @@ def create_html_template():
                 const modal = document.getElementById('bulletinModal');
                 const modalContent = document.getElementById('modalContent');
                 
-                modalContent.innerHTML = `
+                // Renderiza conteúdo principal
+                let html = `
                     <h2>${bulletin.title}</h2>
                     <p><strong>Segmento:</strong> ${bulletin.segment}</p>
                     <p><strong>Artigos analisados:</strong> ${bulletin.articles_count}</p>
                     <p><strong>Data de geração:</strong> ${new Date(bulletin.generated_date).toLocaleString('pt-BR')}</p>
                     <hr>
-                    <div style="margin-top: 20px;">
+                    <div style=\"margin-top: 20px;\">
                         ${bulletin.html_content}
                     </div>
                 `;
+
+                // Top 15 com resumos
+                const summaries = bulletin.article_summaries || [];
+                if (summaries.length) {
+                    html += '<hr><h3 style=\"margin-top:20px;\">Top 15 com Resumos</h3>';
+                    html += '<ol style=\"margin-top:10px;\">';
+                    summaries.forEach(s => {
+                        const t = (s.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                        const u = s.url || '#';
+                        const src = s.source || '';
+                        const dt = s.published || '';
+                        const sm = (s.summary||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                        html += `<li style=\"margin-bottom:10px;\">`
+                             + `<a href=\"${u}\" target=\"_blank\">${t}</a>`
+                             + `<div style=\"font-size:12px;color:#666;\">Fonte: ${src} • Data: ${dt}</div>`
+                             + (sm ? `<details style=\"margin-top:4px;\"><summary>ver resumo</summary><div style=\"margin-top:6px;\">${sm}</div></details>` : '')
+                             + `</li>`;
+                    });
+                    html += '</ol>';
+                }
+
+                modalContent.innerHTML = html;
                 
                 modal.style.display = 'block';
                 
@@ -917,113 +1088,93 @@ def create_html_template():
             }
         }
         
-        async function loadSegmentationData() {
-            const container = document.getElementById('segmentationResults');
-            
+        async function loadSegmentTab(segKey, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '<div class="loading">Carregando...</div>';
             try {
-                const response = await fetch('/api/segmentation_results');
-                const result = await response.json();
-                
-                if (!result.success) {
-                    container.innerHTML = `<div class="error">Erro ao carregar dados de segmentação: ${result.error}</div>`;
+                const [bulletinResp, segResp] = await Promise.all([
+                    fetch(`/api/bulletins/view/${segKey}`),
+                    fetch('/api/segmentation_results')
+                ]);
+                const bulletinResult = await bulletinResp.json();
+                const segResult = await segResp.json();
+                if (!bulletinResult.success) {
+                    container.innerHTML = `<div class="error">${bulletinResult.error || 'Boletim não encontrado'}</div>`;
                     return;
                 }
-                
-                const data = result.data;
-                const stats = data.stats || {};
-                const segmentsStats = stats.segments_stats || {};
-                const segmented = (data.segmented_results || {});
+                if (!segResult.success) {
+                    container.innerHTML = `<div class="error">${segResult.error || 'Dados de segmentação não encontrados'}</div>`;
+                    return;
+                }
+                const bulletin = bulletinResult.bulletin;
+                const data = segResult.data;
                 const selection = (data.selection_by_segment || {});
-                
-                let html = `
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <h3>Total de Artigos</h3>
-                            <div class="value">${stats.total_articles || 0}</div>
-                            <div class="label">artigos processados</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Após Filtros</h3>
-                            <div class="value">${stats.filtered_articles || 0}</div>
-                            <div class="label">artigos válidos</div>
-                        </div>
-                    </div>
-                    <h4 style="margin-top:20px;">Distribuição por Segmento</h4>
-                    <div class="stats-grid">
-                `;
-                
-                const segmentNames = {
-                    'marketing_comunicacao_jornalismo': 'Marketing, Comunicação e Jornalismo',
-                    'direito_corporativo_tributario_trabalhista': 'Direito Corporativo, Tributário, Trabalhista',
-                    'recursos_humanos_gestao_pessoas': 'Recursos Humanos e Gestão de Pessoas',
-                    'outros': 'Outros'
-                };
-                
-                Object.keys(segmentsStats).forEach(segment => {
-                    const count = segmentsStats[segment];
-                    const displayName = segmentNames[segment] || segment;
-                    html += `
-                        <div class="stat-card">
-                            <h3>${displayName}</h3>
-                            <div class="value">${count}</div>
-                            <div class="label">artigos</div>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-                
-                // Listagem detalhada por segmento (todas as notícias)
-                html += `<h4 style="margin-top:20px;">Notícias por Segmento (todas as coletadas)</h4>`;
-                Object.keys(segmentNames).forEach(segKey => {
-                    const list = segmented[segKey] || [];
-                    if (!list.length) return;
-                    html += `<div class="stat-card" style="margin-bottom:15px;">
-                                <h3>${segmentNames[segKey]} — ${list.length} artigos</h3>
-                                <ul style="margin-top:10px;">`;
-                    list.slice(0,300).forEach(a => {
+                const segmented = (data.segmented_results || {});
+                const selectedList = selection[segKey] || [];
+                const segmentedList = segmented[segKey] || [];
+
+                let html = '';
+                // Boletim (inline, copiável)
+                html += '<h4>Boletim</h4>';
+                html += `<div class="stat-card" style="margin-bottom:15px; border-left-color:#28a745;">${bulletin.html_content}</div>`;
+
+                // Top 15, texto integral (sem dropdown)
+                html += '<h4 style="margin-top:20px;">Top 15 Selecionados (texto integral)</h4>';
+                if (!selectedList.length) {
+                    html += '<div class="error">Nenhum selecionado</div>';
+                } else {
+                    selectedList.forEach(a => {
                         const t = (a.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
                         const u = a.url || '#';
                         const src = a.source || '';
                         const dt = a.published || '';
-                        const snippet = (a.content||'').slice(0,800).replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                        html += `<li style="margin-bottom:8px;">
-                                    <a href="${u}" target="_blank">${t}</a>
-                                    <div style="font-size:12px;color:#666;">Fonte: ${src} • Data: ${dt}</div>
-                                    ${snippet ? `<details style="margin-top:4px;"><summary>ver conteúdo</summary><div style="margin-top:6px;">${snippet}...</div></details>` : ''}
-                                 </li>`;
+                        const content = (a.content||'').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\\n/g,'<br>');
+                        html += `<div class=\"stat-card\" style=\"margin-bottom:15px;\">`;
+                        html += `<h3><a href=\"${u}\" target=\"_blank\">${t}</a></h3>`;
+                        html += `<div style=\"font-size:12px;color:#666;\">Fonte: ${src} • Data: ${dt}</div>`;
+                        html += `<div style=\"margin-top:8px;\">${content}</div>`;
+                        html += `</div>`;
                     });
-                    html += `</ul></div>`;
-                });
-                
-                // Top 15 por segmento (selection_by_segment)
-                html += `<h4 style="margin-top:20px;">Top 15 por Segmento (seleção para boletins)</h4>`;
-                Object.keys(segmentNames).forEach(segKey => {
-                    const list = selection[segKey] || [];
-                    if (!list.length) return;
-                    html += `<div class="stat-card" style="margin-bottom:15px; border-left-color:#28a745;">
-                                <h3>${segmentNames[segKey]} — ${list.length} selecionados</h3>
-                                <ul style="margin-top:10px;">`;
-                    list.forEach(a => {
+                }
+
+                // Todas segmentadas (títulos e links)
+                html += '<h4 style="margin-top:20px;">Todas as segmentadas (títulos e links)</h4>';
+                if (!segmentedList.length) {
+                    html += '<div class="error">Sem itens</div>';
+                } else {
+                    html += '<div class="stat-card" style="margin-bottom:15px;"><ul>';
+                    segmentedList.forEach(a => {
                         const t = (a.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
                         const u = a.url || '#';
-                        const src = a.source || '';
-                        const dt = a.published || '';
-                        const snippet = (a.content||'').slice(0,800).replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                        html += `<li style="margin-bottom:8px;">
-                                    <a href="${u}" target="_blank">${t}</a>
-                                    <div style="font-size:12px;color:#666;">Fonte: ${src} • Data: ${dt}</div>
-                                    ${snippet ? `<details style="margin-top:4px;"><summary>ver conteúdo</summary><div style="margin-top:6px;">${snippet}...</div></details>` : ''}
-                                 </li>`;
+                        html += `<li><a href=\"${u}\" target=\"_blank\">${t}</a></li>`;
                     });
-                    html += `</ul></div>`;
-                });
-                
+                    html += '</ul></div>';
+                }
+
                 container.innerHTML = html;
-                
             } catch (error) {
-                container.innerHTML = `<div class="error">Erro de conexão: ${error.message}</div>`;
+                container.innerHTML = `<div class=\"error\">Erro: ${error.message}</div>`;
             }
         }
+        
+        async function sendEmail() {
+            const el = document.getElementById('emailResult');
+            el.innerHTML = '<div class="loading">Enviando...</div>';
+            try {
+                const resp = await fetch('/api/email/send-latest', { method: 'POST' });
+                const result = await resp.json();
+                if (result.success) {
+                    const count = (result.result && result.result.total_recipients) || 0;
+                    el.innerHTML = `<div class=\"success\">Email enviado com sucesso para ${count} destinatários</div>`;
+                } else {
+                    el.innerHTML = `<div class=\"error\">Erro: ${result.error || 'Falha no envio'}</div>`;
+                }
+            } catch (e) {
+                el.innerHTML = `<div class=\"error\">Erro: ${e.message}</div>`;
+            }
+        }
+        
+        
         
         async function loadPipelineData() {
             const container = document.getElementById('pipelineResults');
@@ -1121,7 +1272,7 @@ def create_html_template():
         
         function loadData() {
             loadStats();
-            loadBulletins();
+            loadCollectionData();
         }
         
         // Carrega dados automaticamente quando a página carrega

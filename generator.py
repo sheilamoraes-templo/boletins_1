@@ -12,6 +12,7 @@ import os
 
 from config import Config
 from monitoring_openrouter import OpenRouterGuard
+from ai_agents import ArticleSummarizerAgent, BulletinSynthesisAgent, BulletinReviewAgent
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,10 @@ class BulletinGenerator:
         self.max_tokens = Config.MAX_TOKENS
         self.temperature = Config.TEMPERATURE
         self.guard = OpenRouterGuard()
+        # Agents modulares
+        self.summarizer_agent = ArticleSummarizerAgent()
+        self.synthesis_agent = BulletinSynthesisAgent()
+        self.review_agent = BulletinReviewAgent()
         
         # Templates para diferentes segmentos
         self.templates = {
@@ -131,6 +136,63 @@ class BulletinGenerator:
                 'stats': stats
             }
     
+    def generate_bulletins_from_selection(self, selection_by_segment: Dict[str, List[Dict]]) -> Dict[str, Any]:
+        try:
+            bulletins = {}
+            stats = {
+                'total_segments': len(selection_by_segment),
+                'successful_bulletins': 0,
+                'failed_bulletins': 0,
+                'generation_time': 0,
+                'segments_stats': {}
+            }
+            start_time = time.time()
+            for seg_key, articles in selection_by_segment.items():
+                if seg_key == 'outros' or not articles:
+                    continue
+                summaries: List[str] = []
+                for a in articles:
+                    s = self._summarize_article(a)
+                    summaries.append(s or '')
+                    time.sleep(1)
+                gen = self._generate_bulletin_from_summaries(seg_key, summaries, articles)
+                if gen['status'] == 'success':
+                    template = self.templates.get(seg_key, {'title': f'Boletim de {seg_key.title()}'})
+                    bulletins[seg_key] = {
+                        'status': 'success',
+                        'segment': seg_key,
+                        'title': template.get('title'),
+                        'articles_count': len(articles),
+                        'generated_date': datetime.now().isoformat(),
+                        'method': 'ai_openrouter',
+                        'ai_generated_text': gen['content'],
+                        'selected_articles': articles,
+                        'article_summaries': [
+                            {
+                                'title': a.get('title',''),
+                                'url': a.get('url',''),
+                                'source': a.get('source',''),
+                                'published': a.get('published',''),
+                                'summary': summaries[i] if i < len(summaries) else ''
+                            } for i, a in enumerate(articles)
+                        ]
+                    }
+                    stats['successful_bulletins'] += 1
+                    stats['segments_stats'][seg_key] = len(articles)
+                else:
+                    bulletins[seg_key] = {'status':'error','error':gen.get('error','erro')}
+                    stats['failed_bulletins'] += 1
+            stats['generation_time'] = round(time.time() - start_time, 2)
+            return {
+                'status': 'success',
+                'bulletins': bulletins,
+                'stats': stats,
+                'generated_date': datetime.now().isoformat(),
+                'method': 'ai_openrouter'
+            }
+        except Exception as e:
+            return {'status':'error','error':str(e),'bulletins':{},'stats':{}}
+
     def _select_best_articles(self, articles: List[Dict], max_count: int) -> List[Dict]:
         """Seleciona os melhores artigos para o boletim"""
         try:
@@ -148,60 +210,86 @@ class BulletinGenerator:
             logger.error(f"Erro ao selecionar artigos: {e}")
             return articles[:max_count]
     
-    def _generate_single_bulletin(self, segment_name: str, articles: List[Dict]) -> Dict[str, Any]:
-        """Gera um boletim para um segmento específico"""
+    def _summarize_article(self, article: Dict) -> Optional[str]:
         try:
-            template = self.templates.get(segment_name, {
-                'title': f'Boletim de {segment_name.title()}',
-                'intro': f'Principais notícias sobre {segment_name}',
-                'focus': segment_name
-            })
-            
-            # Prepara contexto dos artigos
-            articles_context = self._prepare_articles_context(articles)
-            
-            # Prompt para geração (adequado ao pedido do usuário)
-            prompt = (
-                f"Você é um jornalista sênior. Gere um boletim semanal em português para o segmento '{template['title']}'.\n"
-                f"Inclua: título; resumo executivo com highlights; texto jornalístico coeso (início, meio e fim) em até 1000 caracteres,\n"
-                f"relatando o que aconteceu na semana no segmento, com tom profissional e didático.\n\n"
-                f"Use apenas os 15 links selecionados.\n\n"
-                f"NOTÍCIAS:\n{articles_context}\n\nGere agora o boletim:"
-            )
-            
-            # Chamada protegida via guard
-            response = self.guard.generate_text(prompt)
-            
-            if response['status'] == 'success':
-                formatted_text = self._format_bulletin_text(
-                    response['content'], 
-                    template, 
-                    articles, 
-                    segment_name
-                )
-                
-                return {
-                    'status': 'success',
-                    'segment': segment_name,
-                    'title': template['title'],
-                    'articles_count': len(articles),
-                    'generated_date': datetime.now().isoformat(),
-                    'method': 'ai_openrouter',
-                    'ai_generated_text': formatted_text,
-                    'selected_articles': articles
-                }
-            else:
-                return {
-                    'status': 'error',
-                    'error': response.get('error', 'Erro desconhecido na API')
-                }
-                
+            return self.summarizer_agent.generate_summary(article)
+        except Exception:
+            return None
+
+    def _generate_bulletin_from_summaries(self, segment_name: str, summaries: List[str], articles: List[Dict]) -> Dict[str, Any]:
+        template = self.templates.get(segment_name, {
+            'title': f'Boletim de {segment_name.title()}',
+            'intro': f'Principais notícias sobre {segment_name}',
+            'focus': segment_name
+        })
+        # Janela de datas aproximada (usa published ou collected)
+        dates = [a.get('published') or a.get('collected_at') for a in articles if a.get('published') or a.get('collected_at')]
+        dates = [d for d in dates if d]
+        date_range = ''
+        if dates:
+            try:
+                from dateutil import parser
+                dts = sorted([parser.parse(d) for d in dates])
+                date_range = f"{dts[0].date().isoformat()}–{dts[-1].date().isoformat()}"
+            except Exception:
+                pass
+        display_name = template['title']
+        # Síntese via agente
+        synth = self.synthesis_agent.generate_bulletin(display_name, date_range, summaries, articles)
+        if synth.get('status') != 'success':
+            return {'status': 'error', 'error': synth.get('error','erro na síntese')}
+        raw_text = synth.get('content','').strip()
+        # Revisão via agente
+        reviewed = self.review_agent.review(raw_text, display_name)
+        final_core = reviewed.get('content', raw_text) if reviewed.get('status') == 'success' else raw_text
+        # Anexa referências
+        refs = []
+        for a in articles:
+            refs.append(f"- {a.get('title','N/A')} — {a.get('source','N/A')} — {a.get('published','N/A')} — {a.get('url','N/A')}")
+        final_text = final_core + "\n\n---\n\n**Referências da semana**\n" + "\n".join(refs)
+        return {
+            'status': 'success',
+            'content': final_text
+        }
+
+    def _generate_single_bulletin(self, segment_name: str, articles: List[Dict]) -> Dict[str, Any]:
+        try:
+            # etapa 1: resumos por artigo
+            summaries: List[str] = []
+            for a in articles:
+                s = self._summarize_article(a)
+                if s:
+                    summaries.append(s)
+                time.sleep(1)
+            if len(summaries) < max(5, int(0.6*len(articles))):
+                logger.warning(f"Poucos resumos gerados para {segment_name}: {len(summaries)} de {len(articles)}")
+            # etapa 2: boletim com base nos resumos
+            gen = self._generate_bulletin_from_summaries(segment_name, summaries[:len(articles)], articles)
+            if gen['status'] != 'success':
+                return {'status':'error','error':gen.get('error','erro na geração do boletim')}
+            template = self.templates.get(segment_name, {'title': f'Boletim de {segment_name.title()}'})
+            return {
+                'status': 'success',
+                'segment': segment_name,
+                'title': template['title'],
+                'articles_count': len(articles),
+                'generated_date': datetime.now().isoformat(),
+                'method': 'ai_openrouter',
+                'ai_generated_text': gen['content'],
+                'selected_articles': articles,
+                'article_summaries': [
+                    {
+                        'title': a.get('title',''),
+                        'url': a.get('url',''),
+                        'source': a.get('source',''),
+                        'published': a.get('published',''),
+                        'summary': summaries[i] if i < len(summaries) else ''
+                    } for i, a in enumerate(articles)
+                ]
+            }
         except Exception as e:
             logger.error(f"Erro ao gerar boletim para {segment_name}: {e}")
-            return {
-                'status': 'error',
-                'error': str(e)
-            }
+            return {'status':'error','error':str(e)}
     
     def _prepare_articles_context(self, articles: List[Dict]) -> str:
         """Prepara contexto dos artigos para o prompt"""
@@ -442,7 +530,7 @@ def main():
     Config.create_directories()
     
     # Valida configuração
-    if not Config.validate_config():
+    if not Config.validate_config(require_api=True):
         print("❌ Configuração inválida. Verifique as variáveis de ambiente.")
         return
     

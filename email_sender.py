@@ -60,7 +60,7 @@ class EmailSender:
                 }
             
             # Prepara email principal
-            email_content = self._prepare_email_content(bulletins)
+            email_content = self._prepare_email_content(bulletins, bulletins_data.get('stats', {}))
             
             # Envia email principal
             result = self._send_email(
@@ -93,7 +93,7 @@ class EmailSender:
                 'error': str(e)
             }
     
-    def _prepare_email_content(self, bulletins: Dict[str, Any]) -> str:
+    def _prepare_email_content(self, bulletins: Dict[str, Any], gen_stats: Dict[str, Any]) -> str:
         """Prepara conteúdo do email principal"""
         try:
             # Cabeçalho do email
@@ -159,6 +159,17 @@ class EmailSender:
         <p>Sistema de Coleta e Análise de Notícias sobre Inteligência Artificial</p>
         <p>Data: {datetime.now().strftime('%d/%m/%Y')}</p>
     </div>
+    <div class="bulletin">
+        <div class="bulletin-title">Resumo do Processo</div>
+        <div class="bulletin-meta">Geração e estatísticas</div>
+        <div>
+            <ul>
+                <li>Boletins gerados: {gen_stats.get('successful_bulletins', 0)}</li>
+                <li>Falhas: {gen_stats.get('failed_bulletins', 0)}</li>
+                <li>Tempo de geração: {gen_stats.get('generation_time', 0)}s</li>
+            </ul>
+        </div>
+    </div>
 """
             
             # Adiciona cada boletim
@@ -167,6 +178,17 @@ class EmailSender:
                 if bulletin_info.get('status') == 'success':
                     successful_bulletins += 1
                     
+                    # Bloco com links e resumo
+                    items_list = []
+                    for a in bulletin_info.get('article_summaries', []):
+                        u = a.get('url', '#')
+                        t = a.get('title', '') or ''
+                        s = (a.get('summary', '') or '')
+                        safe_t = t.replace('<', '&lt;').replace('>', '&gt;')
+                        safe_s = s.replace('<', '&lt;').replace('>', '&gt;')
+                        items_list.append(f'<li><a href="{u}">{safe_t}</a><br><em>{safe_s}</em></li>')
+                    items_html = ''.join(items_list)
+
                     content += f"""
     <div class="bulletin">
         <div class="bulletin-title">{bulletin_info.get('title', f'Boletim de {segment.title()}')}</div>
@@ -176,6 +198,12 @@ class EmailSender:
             Gerado em: {bulletin_info.get('generated_date', 'N/A')}
         </div>
         <div class="bulletin-content">{bulletin_info.get('ai_generated_text', 'Conteúdo não disponível')}</div>
+        <div style="margin-top: 10px;">
+            <strong>Artigos e Resumos:</strong>
+            <ol>
+            {items_html}
+            </ol>
+        </div>
     </div>
 """
             

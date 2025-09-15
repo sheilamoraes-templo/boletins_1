@@ -7,6 +7,8 @@ import time
 import json
 import os
 from datetime import datetime
+import sys
+import argparse
 from typing import Dict, Any, List, Optional
 
 from config import Config
@@ -412,16 +414,27 @@ class BoletinsPipeline:
             return {'status': 'error', 'error': str(e)}
 
 def main():
-    """Função principal para executar o pipeline"""
-    print("PIPELINE DE BOLETINS IA")
-    print("="*50)
-    print("Escolha uma opção:")
-    print("1. Pipeline completo (coleta + segmentação + geração)")
-    print("2. Apenas coleta")
-    print("3. Apenas segmentação")
-    print("4. Apenas geração de boletins")
-    print("5. Exibir últimos resultados")
-    print("="*50)
+    """Função principal para executar o pipeline (interativo ou via flags)"""
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('--mode', choices=['full', 'collect', 'segment', 'generate', 'latest'], help='Modo de execução não interativo')
+    parser.add_argument('--no-ui', action='store_true', help='Não abrir o visualizador ao final')
+    parser.add_argument('--days', type=int, help='Sobrescreve DAYS_BACK para coleta')
+    parser.add_argument('--max-per-source', type=int, help='Sobrescreve MAX_ARTICLES_PER_SOURCE para coleta')
+    parser.add_argument('-h', '--help', action='store_true', help='Mostra ajuda')
+    args, unknown = parser.parse_known_args()
+
+    interactive = args.mode is None
+
+    if interactive:
+        print("PIPELINE DE BOLETINS IA")
+        print("="*50)
+        print("Escolha uma opção:")
+        print("1. Pipeline completo (coleta + segmentação + geração)")
+        print("2. Apenas coleta")
+        print("3. Apenas segmentação")
+        print("4. Apenas geração de boletins")
+        print("5. Exibir últimos resultados")
+        print("="*50)
     
     # Configura logging
     logging.basicConfig(
@@ -523,11 +536,46 @@ def main():
             
             print("\nAbrindo visualizador...")
             start_visualizer()
-    
+
     except KeyboardInterrupt:
         print("\nPipeline interrompido pelo usuário")
     except Exception as e:
         print(f"\nErro inesperado: {e}")
+        
+    else:
+        # Execução via flags (não interativa)
+        logging.basicConfig(
+            level=getattr(logging, Config.LOG_LEVEL),
+            format=Config.LOG_FORMAT,
+            handlers=[
+                logging.FileHandler(f'{Config.LOGS_DIR}/pipeline.log'),
+                logging.StreamHandler()
+            ]
+        )
+        Config.create_directories()
+        pipeline = BoletinsPipeline()
+
+        if args.mode == 'full':
+            res = pipeline.run_full_pipeline(days_back=args.days, max_articles_per_source=args.max_per_source)
+        elif args.mode == 'collect':
+            res = pipeline.run_collection_only(days_back=args.days, max_articles_per_source=args.max_per_source)
+        elif args.mode == 'segment':
+            res = pipeline.run_segmentation_only()
+        elif args.mode == 'generate':
+            res = pipeline.run_generation_only()
+        elif args.mode == 'latest':
+            res = pipeline.get_latest_results()
+        else:
+            print('Modo inválido')
+            sys.exit(2)
+
+        # Abre UI somente se solicitado
+        if not args.no_ui and args.mode in ('full','collect','segment','generate','latest'):
+            start_visualizer()
+        else:
+            # Apenas imprime resumo em modo não interativo
+            if isinstance(res, dict):
+                print(json.dumps({ 'status': res.get('status'), 'summary': res.get('summary') }, ensure_ascii=False))
 
 if __name__ == "__main__":
     main()

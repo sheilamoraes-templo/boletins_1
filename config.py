@@ -4,19 +4,35 @@ Configurações centralizadas do projeto Boletins IA
 
 import os
 from typing import Dict, List, Optional
+from dotenv import load_dotenv
+
+# Carrega .env automaticamente (não versionado)
+load_dotenv()
 
 class Config:
     """Classe de configurações centralizadas"""
     
     # Configurações de API
     OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY', '')
-    GEMINI_MODEL = "google/gemini-2.0-flash-exp"
+    GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'google/gemini-2.5-flash-lite')
     OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
     
     # Configurações de coleta
     DAYS_BACK = 5  # Últimos 5 dias (conforme solicitado)
-    MAX_ARTICLES_PER_SOURCE = 50
+    MAX_ARTICLES_PER_SOURCE = 100
     MAX_ARTICLES_PER_SEGMENT = 15  # 15 artigos por segmento para boletim
+    COLLECT_IA_ONLY = True  # Coletar somente se mencionar IA (título/preview/conteúdo)
+
+    # Selenium (fallback opcional)
+    USE_SELENIUM = False  # desabilitado temporariamente
+    SELENIUM_TIMEOUT = 12  # segundos para aguardar renderização
+    SELENIUM_MAX_PAGES = 10  # máximo de páginas renderizadas por execução
+    SELENIUM_DOMAINS = [
+        'www1.folha.uol.com.br',
+        'www.estadao.com.br',
+        'www.cnnbrasil.com.br',
+        'exame.com',
+    ]
     
     # Configurações de cache
     CACHE_ENABLED = True
@@ -59,12 +75,6 @@ class Config:
                 'https://gizmodo.uol.com.br/feed/',
             ],
             'base_url': 'https://gizmodo.uol.com.br'
-        },
-        'CNN Brasil': {
-            'rss_feeds': [
-                'https://www.cnnbrasil.com.br/feed/',
-            ],
-            'base_url': 'https://www.cnnbrasil.com.br'
         }
     }
     
@@ -78,22 +88,6 @@ class Config:
             'base_url': 'https://www.uol.com.br',
             'sections': ['/tilt/', '/economia/']
         },
-        'Folha de S.Paulo': {
-            'base_url': 'https://www1.folha.uol.com.br',
-            'sections': ['/tec/', '/mercado/']
-        },
-        'O Estado de S. Paulo': {
-            'base_url': 'https://www.estadao.com.br',
-            'sections': ['/tecnologia/', '/economia/']
-        },
-        'CNN Brasil': {
-            'base_url': 'https://www.cnnbrasil.com.br',
-            'sections': ['/tecnologia/', '/negocios/']
-        },
-        'TecMundo': {
-            'base_url': 'https://www.tecmundo.com.br',
-            'sections': ['/inteligencia-artificial/', '/tecnologia/']
-        },
         'Exame': {
             'base_url': 'https://exame.com',
             'sections': ['/tecnologia/', '/negocios/']
@@ -102,9 +96,17 @@ class Config:
             'base_url': 'https://canaltech.com.br',
             'sections': ['/inteligencia-artificial/', '/tecnologia/']
         },
-        'Olhar Digital': {
-            'base_url': 'https://olhardigital.com.br',
-            'sections': ['/2025/','/inteligencia-artificial/','/tecnologia/']
+        'AINEWS': {
+            'base_url': 'https://ainews.net.br',
+            'sections': ['/', '/inteligencia-artificial/']
+        },
+        'TI Inside (Top News)': {
+            'base_url': 'https://tiinside.com.br',
+            'sections': ['/top-news/', '/tag/inteligencia-artificial/']
+        },
+        'BBC Brasil': {
+            'base_url': 'https://www.bbc.com',
+            'sections': ['/portuguese/topics/c340q0gy0n5t']  # Tecnologia (Português)
         }
     }
     
@@ -123,7 +125,8 @@ class Config:
     
     # Palavras bloqueadas
     BLOCKED_KEYWORDS = [
-        'polêmica', 'fofoca', 'bolsonaro', 'influencer'
+        'polêmica', 'fofoca', 'bolsonaro', 'influencer',
+        'iphone', 'morte'
     ]
     
     # Segmentos de interesse (conforme especificado)
@@ -238,6 +241,7 @@ class Config:
                 'acordo coletivo', 'negociação', 'bargaining', 'greve',
                 'representação', 'delegado sindical', 'comissão de fábrica',
                 'cipa', 'comissão interna', 'segurança do trabalho',
+                'demissao', 'demissões',
                 
                 # Tecnologia e Inovação em RH
                 'rh digital', 'people analytics', 'people data', 'dados de rh',
@@ -296,11 +300,15 @@ class Config:
         return cls.OPENROUTER_API_KEY
     
     @classmethod
-    def validate_config(cls) -> bool:
-        """Valida se as configurações estão corretas"""
+    def validate_config(cls, require_api: bool = False) -> bool:
+        """Valida se as configurações estão corretas
+        - require_api=True: exige OPENROUTER_API_KEY (para geração de boletins)
+        - require_api=False: não exige (para coleta/segmentação)
+        """
         try:
-            # Verifica chave da API
-            cls.get_openrouter_api_key()
+            # Verifica chave da API somente se requerido
+            if require_api:
+                cls.get_openrouter_api_key()
             
             # Verifica fontes de notícias
             if not cls.NEWS_SOURCES:

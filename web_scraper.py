@@ -6,7 +6,8 @@ import logging
 import time
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
+import re
 
 import requests
 from bs4 import BeautifulSoup
@@ -27,6 +28,19 @@ class WebScrapingCollector:
             'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8',
         })
         self.extractor = FullContentExtractor()
+        # regras por domínio (regex de notícia)
+        self.domain_allow = {
+            'g1.globo.com': re.compile(r"/(tecnologia|economia|ciencia|ciencia-e-saude|noticia)/", re.I),
+            'www.uol.com.br': re.compile(r"/(tilt|economia)/", re.I),
+            'exame.com': re.compile(r"/(tecnologia|negocios)/", re.I),
+            'canaltech.com.br': re.compile(r"/(inteligencia-artificial|tecnologia|ciencia)/", re.I),
+            'ainews.net.br': re.compile(r"/(inteligencia-artificial|artigos)/", re.I),
+            'tiinside.com.br': re.compile(r"/(top-news|inteligencia-artificial)/", re.I),
+            'www.bbc.com': re.compile(r"/portuguese/", re.I),
+        }
+        self.block_paths = re.compile(r"/(tag|topics|maispopulares|folha-topicos|page|live|flash|ao-vivo|video|videos|podcast|webstories|guia|oferta|ofertas|newsletter|podcasts|videos|elementor-action)/", re.I)
+        self.ai_terms = [k.lower() for k in Config.AI_KEYWORDS]
+        self.block_terms = [k.lower() for k in Config.BLOCKED_KEYWORDS]
 
     def collect_articles(self, days_back: int = 5, max_articles_per_source: int = 50) -> Dict[str, Any]:
         cutoff_date = datetime.now() - timedelta(days=days_back)
@@ -91,41 +105,123 @@ class WebScrapingCollector:
             logger.debug(f"Falha ao buscar {url}: {e}")
             return None
 
+    def _is_news_url(self, url: str) -> bool:
+        try:
+            host = urlparse(url).netloc.lower()
+            path = urlparse(url).path.lower()
+            if self.block_paths.search(path):
+                return False
+            # especificidades por domínio
+            if 'tiinside.com.br' in host:
+                if not re.search(r"/top-news/", path):
+                    return False
+                if re.search(r"/(featured|popular|popular7|review_high)/", path):
+                    return False
+            if 'ainews.net.br' in host:
+                if not re.search(r"/(c/artigos/|/inteligencia-artificial/)", path):
+                    return False
+            pattern = self.domain_allow.get(host)
+            return bool((pattern and pattern.search(path)) or 'tiinside.com.br' in host or 'ainews.net.br' in host)
+        except Exception:
+            return False
+
+    def _text_has_ai_strict(self, title: str, content: Optional[str]) -> bool:
+        title_l = (title or '').lower()
+        content_l = (content or '').lower()
+        # corta para os 2 primeiros parágrafos
+        first_pars = '\n'.join((content_l.split('\n\n')[:2])) if content_l else ''
+        return any(k in title_l for k in self.ai_terms) or any(k in first_pars for k in self.ai_terms)
+
+    def _text_has_ai(self, title: str, content: Optional[str]) -> bool:
+        # mantém função antiga para possíveis usos, mas passa a usar a strict
+        return self._text_has_ai_strict(title, content)
+
+    def _text_has_blocked(self, title: str, content: Optional[str]) -> bool:
+        t = (title or '').lower() + ' ' + (content or '').lower()
+        return any(k in t for k in self.block_terms)
+
     def _extract_articles_from_html(self, html: str, source_name: str, page_url: str) -> List[Dict[str, Any]]:
         soup = BeautifulSoup(html, 'html.parser')
-        # Seletores genéricos razoáveis
-        candidates = soup.select('article a, .post a, .news-item a, h2 a, h3 a')
+        # Seleção base
+        candidates = soup.select('article a, .post a, .news-item a, h2 a, h3 a, a[href]')
+        # Ajuste por domínio (melhor assertividade)
+        try:
+            host = urlparse(page_url).netloc.lower()
+            if 'tiinside.com.br' in host:
+                domain_specific = soup.select('.td-module-title a, h3.entry-title a, article .entry-title a')
+                if domain_specific:
+                    candidates = domain_specific
+            if 'g1.globo.com' in host:
+                domain_specific = soup.select('a.feed-post-link, .feed-post-body-title a, h2 a')
+                if domain_specific:
+                    candidates = domain_specific
+        except Exception:
+            pass
         articles: List[Dict[str, Any]] = []
         seen = set()
-        for a in candidates[:80]:
+        for a in candidates[:300]:
             try:
                 href = a.get('href')
                 title = a.get_text(strip=True)
-                if not href or not title or len(title) < 8:
+                if not href:
                     continue
-                # normaliza url
                 full = urljoin(page_url, href)
                 if full in seen:
                     continue
                 seen.add(full)
-                # filtro IA
-                low = title.lower()
-                if any(k.lower() in low for k in Config.AI_KEYWORDS):
-                    content = self.extractor.get_full_text(full)
-                    articles.append({
-                        'title': title,
-                        'url': full,
-                        'summary': '',
-                        'source': source_name,
-                        'published': '',
-                        'collected_at': datetime.now().isoformat(),
-                        'base_url': page_url,
-                        'method': 'scraping',
-                        'content': content or ''
-                    })
+                if not self._is_news_url(full):
+                    continue
+                # título: preferir H1/og:title, nunca body content
+                h1_title = self._fetch_title_from_page(full)
+                if h1_title and len(h1_title) >= 8:
+                    title = h1_title
+                if not title or len(title) < 8:
+                    continue
+                content = self.extractor.get_full_text(full)
+                # IA primeiro
+                if Config.COLLECT_IA_ONLY and not self._text_has_ai(title, content):
+                    continue
+                # Bloqueados
+                if self._text_has_blocked(title, content):
+                    continue
+                if not content or len(content) < 200:
+                    continue
+                articles.append({
+                    'title': title,
+                    'url': full,
+                    'summary': '',
+                    'source': source_name,
+                    'published': '',
+                    'collected_at': datetime.now().isoformat(),
+                    'base_url': page_url,
+                    'method': 'scraping',
+                    'content': content
+                })
             except Exception:
                 continue
         return articles
+
+    def _fetch_title_from_page(self, url: str) -> Optional[str]:
+        try:
+            html = self._fetch(url)
+            if not html:
+                return None
+            soup = BeautifulSoup(html, 'html.parser')
+            # 1) og:title / twitter:title
+            meta = soup.select_one('meta[property="og:title"][content]') or soup.select_one('meta[name="twitter:title"][content]')
+            if meta:
+                mt = meta.get('content')
+                if mt and 8 <= len(mt) <= 220:
+                    return mt.strip()
+            # 2) h1 puro
+            h1 = soup.find('h1')
+            if h1:
+                t = h1.get_text(strip=True)
+                if t and 8 <= len(t) <= 220:
+                    return t
+            return None
+        except Exception:
+            return None
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
