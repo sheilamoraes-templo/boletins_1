@@ -12,7 +12,6 @@ from flask import Flask, render_template, jsonify, request, Response
 from flask_cors import CORS
 
 from config import Config
-from email_sender import EmailSender
 
 logger = logging.getLogger(__name__)
 
@@ -40,105 +39,7 @@ class BoletinsVisualizer:
             """Página principal"""
             return render_template('index.html')
         
-        @self.app.route('/api/pipeline_results')
-        def get_pipeline_results():
-            """API para obter resultados do pipeline"""
-            try:
-                latest_file = f"{Config.OUTPUT_DIR}/latest_pipeline.json"
-                
-                if not os.path.exists(latest_file):
-                    # Fallback: sintetiza relatório a partir de arquivos existentes
-                    collection_file = f"{Config.OUTPUT_DIR}/latest_collection.json"
-                    segmentation_file = f"{Config.OUTPUT_DIR}/latest_segmentation.json"
-                    bulletins_file = f"{Config.OUTPUT_DIR}/latest_bulletins.json"
-                    collection = {}
-                    segmentation = {}
-                    bulletins = {}
-                    if os.path.exists(collection_file):
-                        try:
-                            with open(collection_file, 'r', encoding='utf-8') as f:
-                                collection = json.load(f)
-                        except Exception:
-                            collection = {}
-                    if os.path.exists(segmentation_file):
-                        try:
-                            with open(segmentation_file, 'r', encoding='utf-8') as f:
-                                segmentation = json.load(f)
-                        except Exception:
-                            segmentation = {}
-                    if os.path.exists(bulletins_file):
-                        try:
-                            with open(bulletins_file, 'r', encoding='utf-8') as f:
-                                bulletins = json.load(f)
-                        except Exception:
-                            bulletins = {}
-
-                    bulletins_map = bulletins.get('bulletins', {}) if isinstance(bulletins, dict) else {}
-                    successful_bulletins = 0
-                    segments_stats = {}
-                    if bulletins_map:
-                        for seg_key, info in bulletins_map.items():
-                            if isinstance(info, dict) and info.get('status') == 'success':
-                                successful_bulletins += 1
-                                # Conta artigos usados por segmento
-                                segments_stats[seg_key] = info.get('articles_count', 0)
-
-                    # Determina status
-                    if successful_bulletins > 0:
-                        status = 'success'
-                    elif segmentation:
-                        status = 'partial'
-                    elif collection:
-                        status = 'partial'
-                    else:
-                        status = 'no_data'
-
-                    # Data de execução (usa o mais recente dos arquivos disponíveis)
-                    times = []
-                    for p in [collection_file, segmentation_file, bulletins_file]:
-                        if os.path.exists(p):
-                            try:
-                                times.append(datetime.fromtimestamp(os.path.getmtime(p)))
-                            except Exception:
-                                pass
-                    execution_date = (max(times).isoformat() if times else datetime.now().isoformat())
-
-                    # Monta resposta compatível
-                    data = {
-                        'status': status,
-                        'summary': {
-                            'execution_time': 0,
-                            'bulletins_generated': successful_bulletins,
-                        },
-                        'pipeline_stats': {
-                            'collected_articles': (collection.get('stats', {}) or {}).get('ai_articles', 0),
-                            'segmented_articles': (segmentation.get('segmentation', {}) or {}).get('total', None) or (segmentation.get('stats', {}) or {}).get('total_articles', 0),
-                            'segments_stats': segments_stats
-                        },
-                        'execution_date': execution_date
-                    }
-
-                    return jsonify({
-                        'success': True,
-                        'data': data,
-                        'timestamp': datetime.now().isoformat()
-                    })
-                
-                with open(latest_file, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                
-                return jsonify({
-                    'success': True,
-                    'data': data,
-                    'timestamp': datetime.now().isoformat()
-                })
-                
-            except Exception as e:
-                logger.error(f"Erro ao obter resultados do pipeline: {e}")
-                return jsonify({
-                    'success': False,
-                    'error': str(e)
-                }), 500
+        # Removido: pipeline_results (IA desligada)
         
         @self.app.route('/api/collection_results')
         def get_collection_results():
