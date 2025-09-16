@@ -20,31 +20,34 @@ logger = logging.getLogger(__name__)
 class EmailSender:
     """Enviador de boletins por email"""
     
-    def __init__(self):
+    def __init__(self, recipients_override: Optional[List[str]] = None):
         self.smtp_server = Config.EMAIL_CONFIG['smtp_server']
         self.smtp_port = Config.EMAIL_CONFIG['smtp_port']
         self.email_user = Config.EMAIL_CONFIG['email_user']
         self.email_password = Config.EMAIL_CONFIG['email_password']
-        self.recipients = Config.EMAIL_CONFIG['recipients']
+        base_recipients = Config.EMAIL_CONFIG['recipients']
+        self.recipients = [r for r in (recipients_override or base_recipients or []) if r]
         
-        # Valida configuração
-        if not self._validate_config():
-            raise ValueError("Configuração de email inválida")
+        # Valida configuração (com override aplicado)
+        self._validate_or_raise()
     
-    def _validate_config(self) -> bool:
-        """Valida se a configuração de email está correta"""
-        required_fields = ['smtp_server', 'smtp_port', 'email_user', 'email_password']
-        
-        for field in required_fields:
-            if not Config.EMAIL_CONFIG.get(field):
-                logger.error(f"Campo obrigatório de email não configurado: {field}")
-                return False
-        
+    def _validate_or_raise(self) -> None:
+        """Valida configuração e lança erro detalhando campos ausentes."""
+        missing: List[str] = []
+        if not self.smtp_server:
+            missing.append('SMTP_SERVER')
+        if not self.smtp_port:
+            missing.append('SMTP_PORT')
+        if not self.email_user:
+            missing.append('EMAIL_USER')
+        if not self.email_password:
+            missing.append('EMAIL_PASSWORD')
         if not self.recipients:
-            logger.error("Nenhum destinatário configurado")
-            return False
-        
-        return True
+            missing.append('EMAIL_RECIPIENTS')
+        if missing:
+            msg = 'Campos faltantes: ' + ', '.join(missing)
+            logger.error(msg)
+            raise ValueError(msg)
     
     def send_bulletins(self, bulletins_data: Dict[str, Any]) -> Dict[str, Any]:
         """Envia boletins por email"""

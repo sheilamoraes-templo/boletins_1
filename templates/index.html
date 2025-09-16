@@ -293,18 +293,9 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Boletins IA</h1>
-        <p>Sistema de Coleta, Segmentação e Geração de Boletins sobre Inteligência Artificial</p>
-    </div>
-    
     <div class="container">
         <button class="refresh-btn" onclick="loadData()">🔄 Atualizar Dados</button>
-        
-        <div class="stats-grid" id="statsGrid">
-            <div class="loading">Carregando estatísticas...</div>
-        </div>
-        
+
         <div class="tabs">
             <div class="tab-headers">
                 <div class="tab-header active" onclick="showTab('collection', this)">Coleta</div>
@@ -313,6 +304,7 @@
                 <div class="tab-header" onclick="showTab('rh', this)">RH</div>
                 <div class="tab-header" onclick="showTab('pipeline', this)">Pipeline</div>
                 <div class="tab-header" onclick="showTab('email', this)">Email</div>
+                <div class="tab-header" onclick="showTab('semia', this)">Sem IA</div>
             </div>
             
             <div class="tab-content">
@@ -349,8 +341,30 @@
                     <h3>Envio por Email</h3>
                     <div>
                         <p>Enviar os últimos boletins gerados para os destinatários configurados.</p>
+                        <label for="emailRecipients" style="font-weight:600;display:block;margin-top:10px;">Destinatários (separados por vírgula)</label>
+                        <input id="emailRecipients" type="text" placeholder="destino1@dominio.com, destino2@dominio.com" style="width:100%; padding:8px; margin:8px 0;" />
+                        <div style="font-size:12px;color:#666; margin-bottom:10px;">Se vazio, usará EMAIL_RECIPIENTS do .env</div>
                         <button class="btn btn-primary" onclick="sendEmail()">Enviar últimos boletins por email</button>
                         <div id="emailResult" style="margin-top:10px;"></div>
+                    </div>
+                </div>
+
+                <div id="semia" class="tab-panel">
+                    <h3>Sem IA — Lousa para copiar e colar no GPT</h3>
+                    <div class="stat-card" style="margin-top:10px;">
+                        <label for="semIaSegment" style="font-weight:600;">Segmento</label>
+                        <select id="semIaSegment" style="margin: 6px 0; padding:6px;">
+                            <option value="all">Todos os segmentos</option>
+                            <option value="direito_corporativo_tributario_trabalhista">Direito Corporativo, Tributário, Trabalhista</option>
+                            <option value="marketing_comunicacao_jornalismo">Marketing, Comunicação e Jornalismo</option>
+                            <option value="recursos_humanos_gestao_pessoas">Recursos Humanos e Gestão de Pessoas</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="loadSemIaText()">Carregar texto</button>
+                        <button class="btn btn-secondary" onclick="copySemIaText()" style="margin-left:8px;">Copiar</button>
+                        <div style="margin-top:10px;">
+                            <textarea id="semIaTextarea" style="width:100%; height:380px; font-family: Consolas, 'Courier New', monospace; font-size: 13px;" placeholder="Clique em Carregar texto para preencher com os artigos selecionados (Top 15) em formato copiável..."></textarea>
+                        </div>
+                        <div id="semIaStatus" style="margin-top:8px; color:#666; font-size:12px;"></div>
                     </div>
                 </div>
             </div>
@@ -403,6 +417,8 @@
                     loadPipelineData();
                     break;
                 case 'email':
+                    break;
+                case 'semia':
                     break;
             }
         }
@@ -461,6 +477,38 @@
             }
         }
         
+        async function loadSemIaText() {
+            const sel = document.getElementById('semIaSegment');
+            const out = document.getElementById('semIaTextarea');
+            const statusEl = document.getElementById('semIaStatus');
+            out.value = '';
+            statusEl.innerText = 'Carregando...';
+            try {
+                const seg = sel ? sel.value : 'all';
+                const resp = await fetch(`/api/export/plaintext?segment=${encodeURIComponent(seg)}`);
+                const data = await resp.json();
+                if (!data.success) {
+                    statusEl.innerText = `Erro: ${data.error || 'Falha ao gerar texto'}`;
+                    return;
+                }
+                out.value = data.text || '';
+                statusEl.innerText = 'Pronto. Use o botão Copiar.';
+            } catch (e) {
+                statusEl.innerText = `Erro: ${e.message}`;
+            }
+        }
+
+        async function copySemIaText() {
+            const out = document.getElementById('semIaTextarea');
+            const statusEl = document.getElementById('semIaStatus');
+            try {
+                await navigator.clipboard.writeText(out.value || '');
+                statusEl.innerText = 'Conteúdo copiado para a área de transferência.';
+            } catch (e) {
+                statusEl.innerText = 'Falha ao copiar. Selecione o texto e copie manualmente (Ctrl+C).';
+            }
+        }
+
         async function viewBulletin(segment) {
             try {
                 const response = await fetch(`/api/bulletins/view/${segment}`);
@@ -620,6 +668,20 @@
                 html += '<h4>Boletim</h4>';
                 html += `<div class="stat-card" style="margin-bottom:15px; border-left-color:#28a745;">${bulletin.html_content}</div>`;
 
+                // Lista resumida (títulos e links) dos Top 15
+                html += '<h4 style="margin-top:20px;">Top 15 Selecionados (títulos e links)</h4>';
+                if (!selectedList.length) {
+                    html += '<div class="error">Nenhum selecionado</div>';
+                } else {
+                    html += '<div class="stat-card" style="margin-bottom:15px;"><ol style="margin-left:18px;">';
+                    selectedList.forEach(a => {
+                        const t = (a.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                        const u = a.url || '#';
+                        html += `<li style="margin-bottom:6px;"><a href="${u}" target="_blank">${t}</a></li>`;
+                    });
+                    html += '</ol></div>';
+                }
+
                 // Top 15, texto integral (sem dropdown)
                 html += '<h4 style="margin-top:20px;">Top 15 Selecionados (texto integral)</h4>';
                 if (!selectedList.length) {
@@ -663,7 +725,17 @@
             const el = document.getElementById('emailResult');
             el.innerHTML = '<div class="loading">Enviando...</div>';
             try {
-                const resp = await fetch('/api/email/send-latest', { method: 'POST' });
+                const inputEl = document.getElementById('emailRecipients');
+                const recStr = inputEl ? (inputEl.value || '') : '';
+                const payload = {};
+                if (recStr && recStr.trim()) {
+                    payload.recipients = recStr.split(',').map(s => s.trim()).filter(Boolean);
+                }
+                const resp = await fetch('/api/email/send-latest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
                 const result = await resp.json();
                 if (result.success) {
                     const count = (result.result && result.result.total_recipients) || 0;
@@ -694,11 +766,15 @@
                 const summary = data.summary || {};
                 const pipelineStats = data.pipeline_stats || {};
                 
+                const collected = pipelineStats.collected_articles || 0;
+                const segmented = pipelineStats.segmented_articles || 0;
+                const segStats = pipelineStats.segments_stats || {};
+
                 let html = `
                     <div class="stats-grid">
                         <div class="stat-card">
                             <h3>Status</h3>
-                            <div class="value">${data.status === 'success' ? '✅ Sucesso' : '❌ Erro'}</div>
+                            <div class="value">${data.status === 'success' ? '✅ Sucesso' : (data.status === 'partial' ? 'ℹ️ Parcial' : '⚠️ Sem dados')}</div>
                             <div class="label">status da execução</div>
                         </div>
                         <div class="stat-card">
@@ -712,58 +788,36 @@
                             <div class="label">boletins criados</div>
                         </div>
                         <div class="stat-card">
+                            <h3>Coletados</h3>
+                            <div class="value">${collected}</div>
+                            <div class="label">artigos coletados</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Segmentados</h3>
+                            <div class="value">${segmented}</div>
+                            <div class="label">artigos segmentados</div>
+                        </div>
+                        <div class="stat-card">
                             <h3>Data de Execução</h3>
                             <div class="value">${new Date(data.execution_date).toLocaleDateString('pt-BR')}</div>
                             <div class="label">última execução</div>
                         </div>
                     </div>
                 `;
-                
-                container.innerHTML = html;
-                
-            } catch (error) {
-                container.innerHTML = `<div class="error">Erro de conexão: ${error.message}</div>`;
-            }
-        }
-        
-        async function loadStats() {
-            const container = document.getElementById('statsGrid');
-            
-            try {
-                const response = await fetch('/api/stats');
-                const result = await response.json();
-                
-                if (!result.success) {
-                    container.innerHTML = `<div class="error">Erro ao carregar estatísticas: ${result.error}</div>`;
-                    return;
+
+                // Detalhe por segmento (artigos usados no Top15 de cada boletim)
+                const segKeys = Object.keys(segStats);
+                if (segKeys.length) {
+                    html += '<h4 style="margin-top:20px;">Por segmento</h4>';
+                    html += '<div class="stat-card" style="margin-top:10px;">';
+                    html += '<ul style="margin-left:16px;">';
+                    segKeys.forEach(k => {
+                        const v = segStats[k] || 0;
+                        html += `<li><strong>${k}</strong>: ${v} artigos utilizados</li>`;
+                    });
+                    html += '</ul>';
+                    html += '</div>';
                 }
-                
-                const stats = result.stats;
-                const collectionStats = stats.collection_stats || {};
-                const generationStats = stats.generation_stats || {};
-                
-                let html = `
-                    <div class="stat-card">
-                        <h3>Artigos Coletados</h3>
-                        <div class="value">${collectionStats.ai_articles || 0}</div>
-                        <div class="label">última coleta</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Boletins Gerados</h3>
-                        <div class="value">${generationStats.successful_bulletins || 0}</div>
-                        <div class="label">última geração</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Fontes Processadas</h3>
-                        <div class="value">${collectionStats.successful_feeds || 0}</div>
-                        <div class="label">fontes ativas</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Status do Sistema</h3>
-                        <div class="value">${collectionStats.ai_articles > 0 ? '✅ Ativo' : '⚠️ Inativo'}</div>
-                        <div class="label">status geral</div>
-                    </div>
-                `;
                 
                 container.innerHTML = html;
                 
@@ -773,7 +827,6 @@
         }
         
         function loadData() {
-            loadStats();
             loadCollectionData();
         }
         

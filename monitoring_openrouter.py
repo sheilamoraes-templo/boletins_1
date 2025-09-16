@@ -107,8 +107,8 @@ class OpenRouterClient:
             demo_text = "[DEMO] Texto de boletim gerado em modo demonstração por falta de API key."
             return {'status': 'success', 'content': demo_text, 'demo': True}
 
-        max_tokens = max_tokens or self.max_tokens
-        temperature = temperature or self.temperature
+        max_tokens = max_tokens if max_tokens is not None else self.max_tokens
+        temperature = temperature if temperature is not None else self.temperature
 
         payload = {
             'model': self.model,
@@ -189,6 +189,6 @@ class OpenRouterGuard:
     def __init__(self):
         self.client = OpenRouterClient()
 
-    def generate_text(self, prompt: str) -> Dict[str, Any]:
+    def generate_text(self, prompt: str, max_tokens: Optional[int] = None, temperature: Optional[float] = None) -> Dict[str, Any]:
         messages = [{ 'role': 'user', 'content': prompt }]
-        return self.client.chat_completion(messages)
+        return self.client.chat_completion(messages, max_tokens=max_tokens, temperature=temperature)

@@ -351,6 +351,85 @@ class BoletinsVisualizer:
                     'error': str(e)
                 }), 500
 
+        @self.app.route('/api/email/preview', methods=['GET'])
+        def preview_email():
+            """Gera uma prévia HTML do email com resumo do pipeline e boletins"""
+            try:
+                collection_file = f"{Config.OUTPUT_DIR}/latest_collection.json"
+                segmentation_file = f"{Config.OUTPUT_DIR}/latest_segmentation.json"
+                bulletins_file = f"{Config.OUTPUT_DIR}/latest_bulletins.json"
+
+                collection = {}
+                segmentation = {}
+                bulletins = {}
+                if os.path.exists(collection_file):
+                    with open(collection_file, 'r', encoding='utf-8') as f:
+                        collection = json.load(f)
+                if os.path.exists(segmentation_file):
+                    with open(segmentation_file, 'r', encoding='utf-8') as f:
+                        segmentation = json.load(f)
+                if os.path.exists(bulletins_file):
+                    with open(bulletins_file, 'r', encoding='utf-8') as f:
+                        bulletins = json.load(f)
+
+                col_stats = (collection.get('stats', {}) if isinstance(collection, dict) else {}) or {}
+                seg_stats = (segmentation.get('stats', {}) if isinstance(segmentation, dict) else {}) or {}
+                bulletins_map = (bulletins.get('bulletins', {}) if isinstance(bulletins, dict) else {}) or {}
+
+                total_coletadas = col_stats.get('total_articles', 0)
+                aprovadas_ia = col_stats.get('ai_articles', seg_stats.get('total_articles', 0)) or 0
+                filtradas = seg_stats.get('filtered_articles', max(0, total_coletadas - aprovadas_ia))
+                dedup_url = col_stats.get('duplicates_removed_url', 0)
+                dedup_title = col_stats.get('duplicates_removed_title', 0)
+                segmentadas = seg_stats.get('total_articles', aprovadas_ia) or 0
+                selecionadas = 0
+                for info in bulletins_map.values():
+                    if isinstance(info, dict) and info.get('status') == 'success':
+                        selecionadas += int(info.get('articles_count', 0))
+
+                # Monta HTML de prévia
+                html = []
+                html.append('<div class="stat-card" style="margin-bottom:15px;">')
+                html.append('<h2 style="margin-bottom:10px;">Prévia do Email - Boletins IA</h2>')
+                html.append('<div style="color:#666; font-size:14px;">Resumo do pipeline</div>')
+                html.append('<ul style="margin-left:18px; margin-top:10px;">')
+                html.append(f'<li><strong>Coletadas</strong>: {total_coletadas}</li>')
+                html.append(f'<li><strong>Filtradas</strong>: {filtradas} (eliminação + bloqueios + ruído)</li>')
+                html.append(f'<li><strong>Aprovadas (IA)</strong>: {aprovadas_ia}</li>')
+                html.append(f'<li><strong>Segmentadas</strong>: {segmentadas}</li>')
+                html.append(f'<li><strong>Selecionadas (Top 15)</strong>: {selecionadas}</li>')
+                html.append(f'<li><strong>Deduplicação</strong>: por URL {dedup_url} • por Título {dedup_title}</li>')
+                html.append('</ul>')
+                html.append('</div>')
+
+                # Boletins por segmento (texto + lista de links usados)
+                for seg_key, info in bulletins_map.items():
+                    if not isinstance(info, dict) or info.get('status') != 'success':
+                        continue
+                    title = info.get('title', seg_key)
+                    generated_date = info.get('generated_date', '')
+                    html_content = self._convert_text_to_html(info.get('ai_generated_text', ''))
+                    selected = info.get('selected_articles', []) or []
+
+                    html.append('<div class="stat-card" style="margin-bottom:15px; border-left-color:#667eea;">')
+                    html.append(f'<div class="bulletin-title">{title}</div>')
+                    html.append(f'<div class="bulletin-meta" style="margin:6px 0 12px 0; color:#666; font-size:12px;">Gerado em: {generated_date} • Artigos: {info.get("articles_count", 0)}</div>')
+                    html.append(f'<div style="margin-top:8px;">{html_content}</div>')
+                    # Lista de artigos (apenas título + link)
+                    if selected:
+                        html.append('<div style="margin-top:12px;"><strong>Artigos utilizados</strong></div>')
+                        html.append('<ol style="margin-top:6px;">')
+                        for a in selected:
+                            t = (a.get('title','') or '').replace('<','&lt;').replace('>','&gt;')
+                            u = a.get('url','') or '#'
+                            html.append(f'<li><a href="{u}" target="_blank">{t}</a></li>')
+                        html.append('</ol>')
+                    html.append('</div>')
+
+                return jsonify({'success': True, 'html': ''.join(html)})
+            except Exception as e:
+                return jsonify({'success': False, 'error': str(e)}), 500
+
         @self.app.route('/api/email/send-latest', methods=['POST'])
         def send_latest_email():
             """Envia por email os últimos boletins gerados"""
@@ -360,14 +439,86 @@ class BoletinsVisualizer:
                     return jsonify({'success': False, 'error': 'Nenhum boletim encontrado'}), 404
                 with open(latest_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
+                # Permite override de recipients via payload JSON { recipients: [..] }
+                recipients_override = None
+                payload = request.get_json(silent=True) or {}
+                recs = payload.get('recipients')
+                if isinstance(recs, list) and recs:
+                    recipients_override = [str(x).strip() for x in recs if str(x).strip()]
                 try:
-                    sender = EmailSender()
+                    sender = EmailSender(recipients_override=recipients_override)
                 except Exception as e:
                     return jsonify({'success': False, 'error': f'Configuração de email inválida: {e}'}), 400
                 result = sender.send_bulletins(data)
                 if result.get('status') == 'success':
                     return jsonify({'success': True, 'result': result})
                 return jsonify({'success': False, 'error': result.get('error','Erro no envio')}), 500
+            except Exception as e:
+                return jsonify({'success': False, 'error': str(e)}), 500
+
+        @self.app.route('/api/export/plaintext')
+        def export_plaintext():
+            """Gera um texto único com os 15 artigos por segmento (conteúdo completo),
+            seguido de títulos e links, para copiar e colar manualmente em um LLM.
+            Query param: segment = { 'direito_corporativo_tributario_trabalhista' | 'marketing_comunicacao_jornalismo' | 'recursos_humanos_gestao_pessoas' | 'all' }
+            """
+            try:
+                segment_req = (request.args.get('segment') or 'all').strip().lower()
+                selection_file = f"{Config.OUTPUT_DIR}/latest_selection.json"
+                segmentation_file = f"{Config.OUTPUT_DIR}/latest_segmentation.json"
+                selection = {}
+                if os.path.exists(selection_file):
+                    with open(selection_file, 'r', encoding='utf-8') as f:
+                        selection = (json.load(f) or {}).get('selection_by_segment', {})
+                else:
+                    # Fallback: tentar do arquivo de segmentação
+                    if os.path.exists(segmentation_file):
+                        with open(segmentation_file, 'r', encoding='utf-8') as f:
+                            seg_data = json.load(f) or {}
+                        selection = seg_data.get('selection_by_segment', {}) or {}
+
+                if not selection:
+                    return jsonify({'success': False, 'error': 'Nenhuma seleção Top15 encontrada.'}), 404
+
+                segments_order = [
+                    'direito_corporativo_tributario_trabalhista',
+                    'marketing_comunicacao_jornalismo',
+                    'recursos_humanos_gestao_pessoas'
+                ]
+                if segment_req != 'all':
+                    segments_order = [s for s in segments_order if s == segment_req]
+
+                parts: List[str] = []
+                for seg_key in segments_order:
+                    articles = selection.get(seg_key) or []
+                    if not articles:
+                        continue
+                    seg_conf = Config.SEGMENTS.get(seg_key, {'name': seg_key})
+                    seg_title = seg_conf.get('name', seg_key)
+                    parts.append(f"### SEGMENTO: {seg_title}\n")
+
+                    # Conteúdo integral dos 15
+                    for i, a in enumerate(articles, 1):
+                        title = a.get('title','') or ''
+                        src = a.get('source','') or ''
+                        dt = a.get('published','') or ''
+                        url = a.get('url','') or ''
+                        content = a.get('content','') or ''
+                        parts.append(f"{i}. {title}\nFonte: {src}\nData: {dt}\nLink: {url}\n\n{content}\n\n---\n")
+
+                    # Lista de títulos e links ao final
+                    parts.append("Referências (títulos e links):")
+                    for i, a in enumerate(articles, 1):
+                        title = a.get('title','') or ''
+                        url = a.get('url','') or ''
+                        src = a.get('source','') or ''
+                        dt = a.get('published','') or ''
+                        parts.append(f"- {i}. {title} — {src} — {dt} — {url}")
+
+                    parts.append("\n\n")
+
+                text = "\n".join(parts).strip()
+                return jsonify({'success': True, 'text': text})
             except Exception as e:
                 return jsonify({'success': False, 'error': str(e)}), 500
     
@@ -791,18 +942,9 @@ def create_html_template():
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Boletins IA</h1>
-        <p>Sistema de Coleta, Segmentação e Geração de Boletins sobre Inteligência Artificial</p>
-    </div>
-    
     <div class="container">
         <button class="refresh-btn" onclick="loadData()">🔄 Atualizar Dados</button>
-        
-        <div class="stats-grid" id="statsGrid">
-            <div class="loading">Carregando estatísticas...</div>
-        </div>
-        
+
         <div class="tabs">
             <div class="tab-headers">
                 <div class="tab-header active" onclick="showTab('collection', this)">Coleta</div>
@@ -811,6 +953,7 @@ def create_html_template():
                 <div class="tab-header" onclick="showTab('rh', this)">RH</div>
                 <div class="tab-header" onclick="showTab('pipeline', this)">Pipeline</div>
                 <div class="tab-header" onclick="showTab('email', this)">Email</div>
+                <div class="tab-header" onclick="showTab('semia', this)">Sem IA</div>
             </div>
             
             <div class="tab-content">
@@ -847,8 +990,30 @@ def create_html_template():
                     <h3>Envio por Email</h3>
                     <div>
                         <p>Enviar os últimos boletins gerados para os destinatários configurados.</p>
+                        <label for="emailRecipients" style="font-weight:600;display:block;margin-top:10px;">Destinatários (separados por vírgula)</label>
+                        <input id="emailRecipients" type="text" placeholder="destino1@dominio.com, destino2@dominio.com" style="width:100%; padding:8px; margin:8px 0;" />
+                        <div style="font-size:12px;color:#666; margin-bottom:10px;">Se vazio, usará EMAIL_RECIPIENTS do .env</div>
                         <button class="btn btn-primary" onclick="sendEmail()">Enviar últimos boletins por email</button>
                         <div id="emailResult" style="margin-top:10px;"></div>
+                    </div>
+                </div>
+
+                <div id="semia" class="tab-panel">
+                    <h3>Sem IA — Lousa para copiar e colar no GPT</h3>
+                    <div class="stat-card" style="margin-top:10px;">
+                        <label for="semIaSegment" style="font-weight:600;">Segmento</label>
+                        <select id="semIaSegment" style="margin: 6px 0; padding:6px;">
+                            <option value="all">Todos os segmentos</option>
+                            <option value="direito_corporativo_tributario_trabalhista">Direito Corporativo, Tributário, Trabalhista</option>
+                            <option value="marketing_comunicacao_jornalismo">Marketing, Comunicação e Jornalismo</option>
+                            <option value="recursos_humanos_gestao_pessoas">Recursos Humanos e Gestão de Pessoas</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="loadSemIaText()">Carregar texto</button>
+                        <button class="btn btn-secondary" onclick="copySemIaText()" style="margin-left:8px;">Copiar</button>
+                        <div style="margin-top:10px;">
+                            <textarea id="semIaTextarea" style="width:100%; height:380px; font-family: Consolas, 'Courier New', monospace; font-size: 13px;" placeholder="Clique em Carregar texto para preencher com os artigos selecionados (Top 15) em formato copiável..."></textarea>
+                        </div>
+                        <div id="semIaStatus" style="margin-top:8px; color:#666; font-size:12px;"></div>
                     </div>
                 </div>
             </div>
@@ -901,6 +1066,8 @@ def create_html_template():
                     loadPipelineData();
                     break;
                 case 'email':
+                    break;
+                case 'semia':
                     break;
             }
         }
@@ -959,6 +1126,38 @@ def create_html_template():
             }
         }
         
+        async function loadSemIaText() {
+            const sel = document.getElementById('semIaSegment');
+            const out = document.getElementById('semIaTextarea');
+            const statusEl = document.getElementById('semIaStatus');
+            out.value = '';
+            statusEl.innerText = 'Carregando...';
+            try {
+                const seg = sel ? sel.value : 'all';
+                const resp = await fetch(`/api/export/plaintext?segment=${encodeURIComponent(seg)}`);
+                const data = await resp.json();
+                if (!data.success) {
+                    statusEl.innerText = `Erro: ${data.error || 'Falha ao gerar texto'}`;
+                    return;
+                }
+                out.value = data.text || '';
+                statusEl.innerText = 'Pronto. Use o botão Copiar.';
+            } catch (e) {
+                statusEl.innerText = `Erro: ${e.message}`;
+            }
+        }
+
+        async function copySemIaText() {
+            const out = document.getElementById('semIaTextarea');
+            const statusEl = document.getElementById('semIaStatus');
+            try {
+                await navigator.clipboard.writeText(out.value || '');
+                statusEl.innerText = 'Conteúdo copiado para a área de transferência.';
+            } catch (e) {
+                statusEl.innerText = 'Falha ao copiar. Selecione o texto e copie manualmente (Ctrl+C).';
+            }
+        }
+
         async function viewBulletin(segment) {
             try {
                 const response = await fetch(`/api/bulletins/view/${segment}`);
@@ -1118,6 +1317,20 @@ def create_html_template():
                 html += '<h4>Boletim</h4>';
                 html += `<div class="stat-card" style="margin-bottom:15px; border-left-color:#28a745;">${bulletin.html_content}</div>`;
 
+                // Lista resumida (títulos e links) dos Top 15
+                html += '<h4 style="margin-top:20px;">Top 15 Selecionados (títulos e links)</h4>';
+                if (!selectedList.length) {
+                    html += '<div class="error">Nenhum selecionado</div>';
+                } else {
+                    html += '<div class="stat-card" style="margin-bottom:15px;"><ol style="margin-left:18px;">';
+                    selectedList.forEach(a => {
+                        const t = (a.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                        const u = a.url || '#';
+                        html += `<li style="margin-bottom:6px;"><a href="${u}" target="_blank">${t}</a></li>`;
+                    });
+                    html += '</ol></div>';
+                }
+
                 // Top 15, texto integral (sem dropdown)
                 html += '<h4 style="margin-top:20px;">Top 15 Selecionados (texto integral)</h4>';
                 if (!selectedList.length) {
@@ -1161,7 +1374,17 @@ def create_html_template():
             const el = document.getElementById('emailResult');
             el.innerHTML = '<div class="loading">Enviando...</div>';
             try {
-                const resp = await fetch('/api/email/send-latest', { method: 'POST' });
+                const inputEl = document.getElementById('emailRecipients');
+                const recStr = inputEl ? (inputEl.value || '') : '';
+                const payload = {};
+                if (recStr && recStr.trim()) {
+                    payload.recipients = recStr.split(',').map(s => s.trim()).filter(Boolean);
+                }
+                const resp = await fetch('/api/email/send-latest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
                 const result = await resp.json();
                 if (result.success) {
                     const count = (result.result && result.result.total_recipients) || 0;
@@ -1192,11 +1415,15 @@ def create_html_template():
                 const summary = data.summary || {};
                 const pipelineStats = data.pipeline_stats || {};
                 
+                const collected = pipelineStats.collected_articles || 0;
+                const segmented = pipelineStats.segmented_articles || 0;
+                const segStats = pipelineStats.segments_stats || {};
+
                 let html = `
                     <div class="stats-grid">
                         <div class="stat-card">
                             <h3>Status</h3>
-                            <div class="value">${data.status === 'success' ? '✅ Sucesso' : '❌ Erro'}</div>
+                            <div class="value">${data.status === 'success' ? '✅ Sucesso' : (data.status === 'partial' ? 'ℹ️ Parcial' : '⚠️ Sem dados')}</div>
                             <div class="label">status da execução</div>
                         </div>
                         <div class="stat-card">
@@ -1210,58 +1437,36 @@ def create_html_template():
                             <div class="label">boletins criados</div>
                         </div>
                         <div class="stat-card">
+                            <h3>Coletados</h3>
+                            <div class="value">${collected}</div>
+                            <div class="label">artigos coletados</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Segmentados</h3>
+                            <div class="value">${segmented}</div>
+                            <div class="label">artigos segmentados</div>
+                        </div>
+                        <div class="stat-card">
                             <h3>Data de Execução</h3>
                             <div class="value">${new Date(data.execution_date).toLocaleDateString('pt-BR')}</div>
                             <div class="label">última execução</div>
                         </div>
                     </div>
                 `;
-                
-                container.innerHTML = html;
-                
-            } catch (error) {
-                container.innerHTML = `<div class="error">Erro de conexão: ${error.message}</div>`;
-            }
-        }
-        
-        async function loadStats() {
-            const container = document.getElementById('statsGrid');
-            
-            try {
-                const response = await fetch('/api/stats');
-                const result = await response.json();
-                
-                if (!result.success) {
-                    container.innerHTML = `<div class="error">Erro ao carregar estatísticas: ${result.error}</div>`;
-                    return;
+
+                // Detalhe por segmento (artigos usados no Top15 de cada boletim)
+                const segKeys = Object.keys(segStats);
+                if (segKeys.length) {
+                    html += '<h4 style="margin-top:20px;">Por segmento</h4>';
+                    html += '<div class="stat-card" style="margin-top:10px;">';
+                    html += '<ul style="margin-left:16px;">';
+                    segKeys.forEach(k => {
+                        const v = segStats[k] || 0;
+                        html += `<li><strong>${k}</strong>: ${v} artigos utilizados</li>`;
+                    });
+                    html += '</ul>';
+                    html += '</div>';
                 }
-                
-                const stats = result.stats;
-                const collectionStats = stats.collection_stats || {};
-                const generationStats = stats.generation_stats || {};
-                
-                let html = `
-                    <div class="stat-card">
-                        <h3>Artigos Coletados</h3>
-                        <div class="value">${collectionStats.ai_articles || 0}</div>
-                        <div class="label">última coleta</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Boletins Gerados</h3>
-                        <div class="value">${generationStats.successful_bulletins || 0}</div>
-                        <div class="label">última geração</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Fontes Processadas</h3>
-                        <div class="value">${collectionStats.successful_feeds || 0}</div>
-                        <div class="label">fontes ativas</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Status do Sistema</h3>
-                        <div class="value">${collectionStats.ai_articles > 0 ? '✅ Ativo' : '⚠️ Inativo'}</div>
-                        <div class="label">status geral</div>
-                    </div>
-                `;
                 
                 container.innerHTML = html;
                 
@@ -1271,7 +1476,6 @@ def create_html_template():
         }
         
         function loadData() {
-            loadStats();
             loadCollectionData();
         }
         

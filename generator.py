@@ -95,11 +95,11 @@ class BulletinGenerator:
                         bulletins[segment_name] = bulletin_result
                         stats['successful_bulletins'] += 1
                         stats['segments_stats'][segment_name] = len(selected_articles)
-                        logger.info(f"✅ Boletim gerado para {segment_name}")
+                        logger.info(f"Boletim gerado para {segment_name}")
                     else:
                         bulletins[segment_name] = bulletin_result
                         stats['failed_bulletins'] += 1
-                        logger.error(f"❌ Erro ao gerar boletim para {segment_name}: {bulletin_result.get('error')}")
+                        logger.error(f"Erro ao gerar boletim para {segment_name}: {bulletin_result.get('error')}")
                     
                     # Pausa entre gerações para evitar rate limiting
                     time.sleep(2)
