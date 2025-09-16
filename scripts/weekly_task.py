@@ -53,54 +53,63 @@ def _html_escape(text: str) -> str:
     return (text or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
-def _build_selection_email_html(selection_by_segment: Dict[str, List[Dict[str, Any]]]) -> str:
-    seg_order = [
-        'marketing_comunicacao_jornalismo',
-        'direito_corporativo_tributario_trabalhista',
-        'recursos_humanos_gestao_pessoas',
-    ]
-    seg_names = {
-        k: (Config.SEGMENTS.get(k, {}).get('name') or k) for k in seg_order
-    }
+def _build_segment_email_html(seg_key: str, articles: List[Dict[str, Any]]) -> str:
+    seg_name = (Config.SEGMENTS.get(seg_key, {}).get('name')) or seg_key
+    date_str = datetime.now().strftime('%d/%m/%Y %H:%M')
 
     parts: List[str] = []
-    parts.append('<div style="font-family:Segoe UI,Arial,sans-serif; line-height:1.5; color:#222;">')
-    parts.append('<h1 style="margin:0 0 10px 0;">Top 15 integrais por segmento</h1>')
-    parts.append(f'<div style="color:#666; font-size:13px;">Data: {datetime.now().strftime("%d/%m/%Y %H:%M")}</div>')
-
-    for seg in seg_order:
-        arts = selection_by_segment.get(seg) or []
-        if not arts:
-            continue
-        parts.append(f'<hr><h2 style="margin:16px 0 8px 0;">{_html_escape(seg_names[seg])}</h2>')
-        # Bloco copiável: 15 integrais
-        for i, a in enumerate(arts, 1):
-            title = _html_escape(a.get('title') or '')
-            src = _html_escape(a.get('source') or '')
-            dt = _html_escape(a.get('published') or '')
-            url = a.get('url') or ''
-            content = _html_escape(a.get('content') or '')
-            parts.append('<div style="background:#f8f9fa;border-left:4px solid #667eea;padding:12px;margin:10px 0;">')
-            parts.append(f'<div style="font-weight:700;">{i}. {title}</div>')
-            parts.append(f'<div style="color:#666; font-size:12px;">Fonte: {src} • Data: {dt} • <a href="{url}" target="_blank">link</a></div>')
-            parts.append(f'<div style="margin-top:8px; white-space:pre-wrap;">{content}</div>')
-            parts.append('</div>')
-        # Lista final de títulos/links
-        parts.append('<div style="margin-top:8px;"><strong>Referências</strong></div>')
-        parts.append('<ol style="margin:6px 0 16px 18px;">')
-        for i, a in enumerate(arts, 1):
-            title = _html_escape(a.get('title') or '')
-            url = a.get('url') or ''
-            src = _html_escape(a.get('source') or '')
-            dt = _html_escape(a.get('published') or '')
-            parts.append(f'<li>{title} — {src} — {dt} — <a href="{url}" target="_blank">{url}</a></li>')
-        parts.append('</ol>')
-
+    parts.append('<!DOCTYPE html>')
+    parts.append('<html lang="pt-BR">')
+    parts.append('<head>')
+    parts.append('<meta charset="UTF-8">')
+    parts.append('<meta name="viewport" content="width=device-width, initial-scale=1.0">')
+    parts.append(f'<title>Notícias coletadas {date_str} - {_html_escape(seg_name)}</title>')
+    parts.append('<style>')
+    parts.append('body{font-family:Segoe UI,Arial,sans-serif;line-height:1.6;color:#222;margin:0;padding:0;background:#ffffff;}')
+    parts.append('.container{max-width:860px;margin:0 auto;padding:24px;}')
+    parts.append('.header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:20px;border-radius:10px;margin-bottom:18px;}')
+    parts.append('.header h1{margin:0 0 6px 0;font-size:22px;} .header .meta{font-size:12px;opacity:.9;}')
+    parts.append('.card{background:#f8f9fa;border-left:4px solid #667eea;padding:12px 14px;margin:10px 0;border-radius:6px;}')
+    parts.append('.title{font-weight:700;margin-bottom:4px;} .meta{color:#666;font-size:12px;}')
+    parts.append('.content{margin-top:8px;white-space:pre-wrap;font-family:Segoe UI,Arial,sans-serif;}')
+    parts.append('.refs{margin-top:10px;} .refs ol{margin:6px 0 0 18px;} .refs li{margin:3px 0;}')
+    parts.append('.footer{color:#666;font-size:12px;margin-top:18px;text-align:center;}')
+    parts.append('</style>')
+    parts.append('</head>')
+    parts.append('<body>')
+    parts.append('<div class="container">')
+    parts.append('<div class="header">')
+    parts.append(f'<h1>Notícias coletadas {_html_escape(date_str)} - {_html_escape(seg_name)}</h1>')
+    parts.append(f'<div class="meta">Pronto para copiar e colar em uma LLM</div>')
     parts.append('</div>')
+
+    for i, a in enumerate(articles, 1):
+        title = _html_escape(a.get('title') or '')
+        src = _html_escape(a.get('source') or '')
+        dt = _html_escape(a.get('published') or '')
+        url = a.get('url') or ''
+        content = _html_escape(a.get('content') or '')
+        parts.append('<div class="card">')
+        parts.append(f'<div class="title">{i}. {title}</div>')
+        parts.append(f'<div class="meta">Fonte: {src} • Data: {dt} • <a href="{url}" target="_blank">{_html_escape(url)}</a></div>')
+        parts.append(f'<div class="content">{content}</div>')
+        parts.append('</div>')
+
+    parts.append('<div class="refs"><strong>Referências</strong><ol>')
+    for i, a in enumerate(articles, 1):
+        title = _html_escape(a.get('title') or '')
+        url = a.get('url') or ''
+        src = _html_escape(a.get('source') or '')
+        dt = _html_escape(a.get('published') or '')
+        parts.append(f'<li>{title} — {src} — {dt} — <a href="{url}" target="_blank">{_html_escape(url)}</a></li>')
+    parts.append('</ol></div>')
+    parts.append('<div class="footer">Boletins IA (Sem IA) — este email contém o conteúdo integral dos 15 artigos do segmento, em formato copiável.</div>')
+    parts.append('</div>')
+    parts.append('</body></html>')
     return '\n'.join(parts)
 
 
-def _send_email(html_body: str) -> None:
+def _send_email(html_body: str, subject: str) -> None:
     smtp_server = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
     smtp_port = int(os.getenv('SMTP_PORT', '587'))
     email_user = os.getenv('EMAIL_USER')
@@ -117,7 +126,7 @@ def _send_email(html_body: str) -> None:
     msg = MIMEMultipart('alternative')
     msg['From'] = email_user
     msg['To'] = ', '.join(recipients)
-    msg['Subject'] = 'Boletins IA (Sem IA) - Top 15 integrais por segmento'
+    msg['Subject'] = subject
     msg.attach(MIMEText(html_body, 'html', 'utf-8'))
 
     server = smtplib.SMTP(smtp_server, smtp_port)
@@ -149,11 +158,37 @@ def run_weekly() -> None:
     else:
         raise RuntimeError(f"Erro na segmentação: {seg.get('error')}")
 
-    # Email com Top15 integrais
-    selection = _load_selection()
-    html = _build_selection_email_html(selection)
-    _send_email(html)
-    logger.info("Email enviado com os Top 15 integrais por segmento")
+    # Email com Top15 integrais (um por segmento)
+    # Carrega seleção com fallback para latest_segmentation.json, se necessário
+    selection = {}
+    try:
+        selection = _load_selection()
+    except Exception:
+        segf = f"{Config.OUTPUT_DIR}/latest_segmentation.json"
+        if os.path.exists(segf):
+            with open(segf, 'r', encoding='utf-8') as f:
+                seg_data = json.load(f) or {}
+            selection = seg_data.get('selection_by_segment', {}) or {}
+        else:
+            raise
+
+    seg_order = [
+        'marketing_comunicacao_jornalismo',
+        'direito_corporativo_tributario_trabalhista',
+        'recursos_humanos_gestao_pessoas',
+    ]
+    seg_names = {k: (Config.SEGMENTS.get(k, {}).get('name') or k) for k in seg_order}
+    sent_count = 0
+    date_str = datetime.now().strftime('%d/%m/%Y %H:%M')
+    for seg in seg_order:
+        arts = selection.get(seg) or []
+        if not arts:
+            continue
+        html = _build_segment_email_html(seg, arts)
+        subject = f"Notícias coletadas {date_str} - {seg_names[seg]}"
+        _send_email(html, subject)
+        sent_count += 1
+    logger.info(f"Emails enviados por segmento: {sent_count}")
 
 
 if __name__ == '__main__':
