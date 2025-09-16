@@ -120,6 +120,18 @@ class Config:
         'NeoFeed IA': {
             'base_url': 'https://neofeed.com.br',
             'sections': ['/noticias-sobre/inteligencia-artificial/']
+        },
+        'CNN Brasil Tecnologia': {
+            'base_url': 'https://www.cnnbrasil.com.br',
+            'sections': ['/tecnologia/']
+        },
+        'IT Forum': {
+            'base_url': 'https://itforum.com.br',
+            'sections': ['/noticias/']
+        },
+        'Forbes Brasil (IA)': {
+            'base_url': 'https://forbes.com.br',
+            'sections': ['/noticias-sobre/ia/']
         }
     }
     

@@ -41,6 +41,9 @@ class WebScrapingCollector:
             'iaexpert.academy': re.compile(r"/", re.I),
             'gauchazh.clicrbs.com.br': re.compile(r"/", re.I),
             'neofeed.com.br': re.compile(r"/", re.I),
+            'www.cnnbrasil.com.br': re.compile(r"/tecnologia/|/tecnologia/.*", re.I),
+            'itforum.com.br': re.compile(r"/noticias/|/noticia/", re.I),
+            'forbes.com.br': re.compile(r"/noticias-sobre/ia/|/forbes-tech/|/tecnologia/", re.I),
         }
         self.block_paths = re.compile(r"/(tag|topics|maispopulares|folha-topicos|page|live|flash|ao-vivo|video|videos|podcast|webstories|guia|oferta|ofertas|podcasts|videos|elementor-action)/", re.I)
         self.ai_terms = [k.lower() for k in Config.AI_KEYWORDS]

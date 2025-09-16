@@ -50,7 +50,10 @@ class FullContentExtractor:
             'www.infomoney.com.br': ['article', '.article__content', '.single__content', '.single__text', '.page-content'],
             'iaexpert.academy': ['article', '.entry-content', '.post-content', '.single-post', 'main'],
             'gauchazh.clicrbs.com.br': ['article', 'main', '.content', '.article'],
-            'neofeed.com.br': ['article', '.td-post-content', '.entry-content', '.content']
+            'neofeed.com.br': ['article', '.td-post-content', '.entry-content', '.content'],
+            'www.cnnbrasil.com.br': ['article', '.article__content', '.post-content', 'main'],
+            'itforum.com.br': ['article', '.entry-content', '.post-content', '.td-post-content', '.single-content'],
+            'forbes.com.br': ['article', '.post-content', '.single__content', '.article__content', 'main']
         }
         self.selenium_pages_used = 0
         self._driver = None

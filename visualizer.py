@@ -284,6 +284,7 @@ class BoletinsVisualizer:
                     'generation_stats': self._get_generation_stats(),
                     'pipeline_stats': self._get_pipeline_stats(),
                     'source_quality': self._get_source_quality(),
+                    'keywords_by_segment': self._get_keywords_by_segment(),
                     'timestamp': datetime.now().isoformat()
                 }
                 
@@ -298,6 +299,28 @@ class BoletinsVisualizer:
                     'success': False,
                     'error': str(e)
                 }), 500
+
+        @self.app.route('/api/logs/collector')
+        def api_log_collector():
+            try:
+                log_path = f"{Config.LOGS_DIR}/collector.log"
+                if not os.path.exists(log_path):
+                    return Response("(collector.log ainda não existe)", mimetype='text/plain; charset=utf-8')
+                with open(log_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    return Response(f.read(), mimetype='text/plain; charset=utf-8')
+            except Exception as e:
+                return Response(f"Erro ao ler collector.log: {e}", mimetype='text/plain; charset=utf-8', status=500)
+
+        @self.app.route('/api/logs/pipeline')
+        def api_log_pipeline():
+            try:
+                log_path = f"{Config.LOGS_DIR}/pipeline.log"
+                if not os.path.exists(log_path):
+                    return Response("(pipeline.log ainda não existe)", mimetype='text/plain; charset=utf-8')
+                with open(log_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    return Response(f.read(), mimetype='text/plain; charset=utf-8')
+            except Exception as e:
+                return Response(f"Erro ao ler pipeline.log: {e}", mimetype='text/plain; charset=utf-8', status=500)
 
         @self.app.route('/api/email/preview', methods=['GET'])
         def preview_email():
@@ -473,7 +496,7 @@ class BoletinsVisualizer:
                     parts.append('<body>')
                     parts.append('<div class="container">')
                     parts.append('<div class="header">')
-                    parts.append(f'<h1>Top 15 integrais — {seg_title}</h1>')
+                    parts.append(f'<h1>Notícias coletadas {esc(date_str)} - {seg_title}</h1>')
                     parts.append(f'<div class="meta">Gerado em {esc(date_str)} — pronto para copiar e colar em uma LLM</div>')
                     parts.append('</div>')
 
@@ -505,7 +528,7 @@ class BoletinsVisualizer:
                     msg = MIMEMultipart('alternative')
                     msg['From'] = email_user
                     msg['To'] = ', '.join(recipients)
-                    msg['Subject'] = f'Top 15 integrais — {seg_title} (Sem IA) — {date_str}'
+                    msg['Subject'] = f'Notícias coletadas {date_str} - {seg_title}'
                     msg.attach(MIMEText(html_body, 'html', 'utf-8'))
                     server.sendmail(email_user, recipients, msg.as_string())
                     segments_sent += 1
@@ -663,6 +686,40 @@ class BoletinsVisualizer:
                     'selection_rate': round(rate, 3)
                 }
             return quality
+        except Exception:
+            return {}
+
+    def _get_keywords_by_segment(self) -> Dict[str, List[List[Any]]]:
+        """Gera top palavras por segmento a partir do Top 15 (latest_selection.json)."""
+        try:
+            latest_selection = f"{Config.OUTPUT_DIR}/latest_selection.json"
+            if not os.path.exists(latest_selection):
+                return {}
+            with open(latest_selection, 'r', encoding='utf-8') as f:
+                sel = json.load(f) or {}
+            selection = sel.get('selection_by_segment', {}) or {}
+            stop = {
+                'de','da','do','das','dos','a','o','os','as','e','é','em','para','por','com','um','uma','no','na','nos','nas','que','se','sua','seu','suas','seus','ao','à','às','aos','mais','menos','entre','sobre','como','já','não','sim','ou','também','foi','são','ser','tem','há','após','até','desde','quando','onde','qual','quais','porque','porquê','isso','isto','aquele','aquela','aquilo','lo','la','lhe','eles','elas','ele','ela','d','p','r','t','s','&','–','-'
+            }
+            import re as _re
+            from collections import Counter
+            result: Dict[str, List[List[Any]]] = {}
+            for seg_key in Config.SEGMENTS.keys():
+                arts = selection.get(seg_key) or []
+                if not arts:
+                    result[seg_key] = []
+                    continue
+                text_parts: List[str] = []
+                for a in arts:
+                    text_parts.append(a.get('title') or '')
+                    text_parts.append(a.get('content') or '')
+                text = ' '.join(text_parts).lower()
+                tokens = _re.findall(r"\b\w+\b", text, flags=_re.UNICODE)
+                tokens = [w for w in tokens if len(w) >= 3 and w not in stop]
+                counts = Counter(tokens)
+                top = counts.most_common(50)
+                result[seg_key] = [[w, int(c)] for w, c in top]
+            return result
         except Exception:
             return {}
     
@@ -1460,6 +1517,7 @@ def create_html_template():
                 const seg = stats.segmentation_stats || {};
                 const gen = stats.generation_stats || {};
                 const srcq = stats.source_quality || {};
+                const kw = stats.keywords_by_segment || {};
 
                 let html = `
                     <div class="stats-grid">
@@ -1524,6 +1582,38 @@ def create_html_template():
                     html += '</ul>';
                     html += '</div>';
                 }
+
+                // Palavras‑chave por segmento (Top 15)
+                const kwSegs = Object.keys(kw);
+                if (kwSegs.length) {
+                    html += '<h4 style="margin-top:20px;">Palavras‑chave por segmento (Top 15)</h4>';
+                    kwSegs.forEach(skey => {
+                        const items = kw[skey] || [];
+                        html += '<div class="stat-card" style="margin-top:10px;">';
+                        html += `<div style=\"font-weight:600; margin-bottom:6px;\">${skey}</div>`;
+                        if (!items.length) {
+                            html += '<div style="color:#666;">Sem dados</div>';
+                        } else {
+                            html += '<ul style="margin-left:16px; columns: 2; -webkit-columns: 2; -moz-columns: 2;">';
+                            items.slice(0,20).forEach(pair => {
+                                const w = pair[0];
+                                const c = pair[1];
+                                html += `<li>${w}: ${c}</li>`;
+                            });
+                            html += '</ul>';
+                        }
+                        html += '</div>';
+                    });
+                }
+
+                // Logs embutidos
+                html += '<h4 style="margin-top:20px;">Logs</h4>';
+                html += '<div class="stat-card" style="margin-top:10px;">';
+                html += '<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">';
+                html += '<div><div style="font-weight:600;">collector.log</div><iframe src="/api/logs/collector" style="width:100%; height:280px; border:1px solid #ddd; border-radius:6px; background:#fff;"></iframe></div>';
+                html += '<div><div style="font-weight:600;">pipeline.log</div><iframe src="/api/logs/pipeline" style="width:100%; height:280px; border:1px solid #ddd; border-radius:6px; background:#fff;"></iframe></div>';
+                html += '</div>';
+                html += '</div>';
 
                 container.innerHTML = html;
             } catch (error) {

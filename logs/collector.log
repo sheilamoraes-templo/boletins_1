@@ -2264,3 +2264,424 @@ Processando fonte RSS: Gizmodo Brasil
 2025-09-16 18:41:10,959 - __main__ - INFO - ============================================================
 2025-09-16 18:41:10,977 - __main__ - INFO - Resultados salvos em: outputs/collection_20250916_184110.json
 2025-09-16 18:41:11,027 - __main__ - INFO - Resultados também salvos como: outputs/latest_collection.json
+2025-09-16 19:31:34,293 - __main__ - INFO - INICIANDO COLETA DE NOTÍCIAS (HÍBRIDO)
+2025-09-16 19:31:34,293 - __main__ - INFO - ==================================================
+2025-09-16 19:31:34,294 - __main__ - INFO - Período: últimos 5 dias
+2025-09-16 19:31:34,294 - __main__ - INFO - Máximo por fonte: 100 artigos
+2025-09-16 19:31:34,294 - __main__ - INFO - Fontes RSS: 4 | Fontes scraping: 14
+2025-09-16 19:31:34,294 - __main__ - INFO - 
+Processando fonte RSS: G1
+2025-09-16 19:31:34,294 - __main__ - INFO -   Feed: https://g1.globo.com/rss/g1/tecnologia/
+2025-09-16 19:31:35,875 - __main__ - INFO - 
+Processando fonte RSS: UOL
+2025-09-16 19:31:35,875 - __main__ - INFO -   Feed: https://rss.uol.com.br/feed/tecnologia.xml
+2025-09-16 19:31:36,369 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/redacao/2025/09/16/como-funciona-o-discord-onde-suspeito-de-matar-kirk-teria-confessado-crime.htm
+2025-09-16 19:31:36,530 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/redacao/2025/09/16/qual-a-diferenca-entre-o-eclipse-solar-de-setembro-e-o-de-marco.htm
+2025-09-16 19:31:36,682 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/reuters/2025/09/16/disney-universal-e-warner-bros-discovery-processam-minimax-da-china-por-violacao-de-direitos-autorais.htm
+2025-09-16 19:31:36,834 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/reuters/2025/09/16/bancos-suicos-anunciam-1-pagamento-com-blockchain-publico.htm
+2025-09-16 19:31:36,983 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/redacao/2025/09/16/mpf-grindr-hornet.htm
+2025-09-16 19:31:37,123 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/redacao/2025/09/16/nubank-fecha-parceria-com-uber-e-oferece-corridas-gratuitas-e-com-desconto.htm
+2025-09-16 19:31:37,270 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/reuters/2025/09/16/startup-de-robotica-figure-e-avaliada-em-us39-bilhoes-em-rodada-de-financiamento.htm
+2025-09-16 19:31:37,429 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/reuters/2025/09/16/fabricante-de-smartphones-nothing-levanta-us200-milhoes-e-e-avaliada-em-us13-bilhao.htm
+2025-09-16 19:31:37,575 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/reuters/2025/09/16/trump-diz-que-eua-anunciarao-comprador-para-tiktok.htm
+2025-09-16 19:31:37,711 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/redacao/2025/09/16/tiktok-eua-licenciamento-algoritmo-chines.htm
+2025-09-16 19:31:37,847 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://noticias.uol.com.br/ultimas-noticias/afp/2025/09/16/partido-politico-japones-vai-nomear-ia-como-lider.htm
+2025-09-16 19:31:38,913 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/redacao/2025/09/16/buracos-negros-confirmam-teoria-de-stephen-hawking-prevista-ha-50-anos.htm
+2025-09-16 19:31:39,057 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/noticias/redacao/2025/09/16/mar-nuvem-e-supercomputador-brasil-e-brics-criam-megaplano-de-tecnologia.htm
+2025-09-16 19:31:39,559 - __main__ - INFO - 
+Processando fonte RSS: TI Inside
+2025-09-16 19:31:39,562 - __main__ - INFO -   Feed: https://tiinside.com.br/feed/
+2025-09-16 19:31:41,264 - __main__ - INFO - 
+Processando fonte RSS: Gizmodo Brasil
+2025-09-16 19:31:41,264 - __main__ - INFO -   Feed: https://gizmodo.uol.com.br/feed/
+2025-09-16 19:31:43,652 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/tecnologia/noticia/2025/09/16/trump-diz-que-eua-e-china-chegaram-a-acordo-sobre-tiktok-e-estende-prazo-para-venda-da-plataforma-no-pais.ghtml
+2025-09-16 19:31:44,201 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/tecnologia/noticia/2025/09/16/chatgpt-podera-avisar-policia-se-adolescentes-estiverem-com-ideias-suicidas-diz-openai.ghtml
+2025-09-16 19:31:44,710 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/tecnologia/noticia/2025/09/16/trend-da-polaroid-como-fazer-uma-foto-com-seu-artista-favorito-usando-ia.ghtml
+2025-09-16 19:31:45,356 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/educacao/noticia/2025/09/16/7-em-cada-10-alunos-de-ensino-medio-usam-ia-generativa-em-pesquisas-escolares.ghtml
+2025-09-16 19:31:45,883 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/tecnologia/noticia/2025/09/16/mae-processa-roblox-e-discord-apos-filho-de-15-anos-sofrer-abuso-online-e-tirar-a-propria-vida.ghtml
+2025-09-16 19:31:46,461 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/economia/noticia/2025/09/15/alphabet-atinge-us-3-tri-em-valor-de-mercado-pela-1a-vez.ghtml
+2025-09-16 19:31:47,114 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/economia/noticia/2025/09/15/trump-avanco-acordo-china-tiktok.ghtml
+2025-09-16 19:31:47,832 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/economia/noticia/2025/09/15/china-acusa-nvidia-de-violar-lei-antitruste-em-meio-a-negociacoes-comerciais-com-os-eua.ghtml
+2025-09-16 19:31:48,643 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/tecnologia/noticia/2025/09/15/ios-26-e-liberado-nesta-segunda-veja-as-novidades-e-como-atualizar-o-iphone.ghtml
+2025-09-16 19:31:49,254 - cache_manager - INFO - Cache válido encontrado para analysis:https://g1.globo.com/tecnologia/noticia/2025/09/15/starlink-servico-de-internet-de-musk-instabilidade.ghtml
+2025-09-16 19:31:49,759 - web_scraper - INFO - G1: 6 artigos
+2025-09-16 19:31:50,441 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/
+2025-09-16 19:31:50,728 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/fique-por-dentro/
+2025-09-16 19:31:51,054 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.uol.com.br/tilt/tec-a-seu-favor/
+2025-09-16 19:31:51,772 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.uol.com.br/tilt/novos-habitos/
+2025-09-16 19:31:52,209 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/blogs-e-colunas/
+2025-09-16 19:31:52,592 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/lancamentos/
+2025-09-16 19:31:52,844 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/whatsapp/
+2025-09-16 19:31:53,087 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/redes-sociais/
+2025-09-16 19:31:53,452 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/isso-e-golpe/
+2025-09-16 19:31:53,908 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/astronomia/
+2025-09-16 19:31:54,167 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/negocios/
+2025-09-16 19:31:54,472 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/teste-velocidade-internet/
+2025-09-16 19:31:54,950 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.uol.com.br/tilt/ficadica/
+2025-09-16 19:31:55,428 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.uol.com.br/tilt/dicas-matadoras/
+2025-09-16 19:31:56,038 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/a-tecnologia-por-tras/
+2025-09-16 19:31:56,670 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.uol.com.br/tilt/comparativo/
+2025-09-16 19:31:57,136 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.uol.com.br/tilt/no-brasil-nao-tem/
+2025-09-16 19:31:57,643 - web_scraper - INFO - UOL: 9 artigos
+2025-09-16 19:31:58,610 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://exame.com/tecnologia/
+2025-09-16 19:31:59,946 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://exame.com/tecnologia/examelab/
+2025-09-16 19:32:00,282 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/nem-toda-obesidade-traz-risco-estudo-revela-genes-que-permitem-ser-obeso-e-metabolicamente-saudavel/
+2025-09-16 19:32:00,481 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/para-ampliar-oportunidades-profissionais-duolingo-anuncia-integracao-do-duolingo-score-com-linkedin/
+2025-09-16 19:32:03,241 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/apple-inicia-pre-venda-do-iphone-17-no-brasil-precos-vao-de-r-7-999-a-r-18-499/
+2025-09-16 19:32:06,271 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/app-do-tiktok-para-os-eua-utilizara-algoritmo-chines-desenvolvido-pela-bytedance/
+2025-09-16 19:32:06,458 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/brasileira-formada-no-mit-cria-empresa-que-acerta-previsoes-de-eleicoes-recessao-e-ate-ia/
+2025-09-16 19:32:09,271 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/proposta-do-google-para-vender-parte-de-seu-negocio-de-anuncios-nao-anima-governo-dos-eua/
+2025-09-16 19:32:11,432 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/verificacao-de-idade-obrigatoria-pode-chegar-ao-tiktok-instagram-e-youtube-em-nova-york/
+2025-09-16 19:32:13,938 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/governo-prepara-edicao-de-mp-para-garantir-isencoes-a-data-centers-antes-da-reforma-tributaria/
+2025-09-16 19:32:16,984 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/google-atinge-us-3-trilhoes-apos-decisao-antitruste-aliviar-pressao/
+2025-09-16 19:32:17,194 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/eua-e-china-fecham-acordo-sobre-o-tiktok-operacao-sera-confirmada-por-trump-e-xi/
+2025-09-16 19:32:17,394 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/app-bitchat-criado-por-jack-dorsey-ganha-forca-durante-protestos-no-nepal-e-na-indonesia/
+2025-09-16 19:32:17,600 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/ipo-da-figure-arrecada-us-787-milhoes-e-cria-novo-bilionario-do-setor-cripto/
+2025-09-16 19:32:17,799 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/por-que-uma-inteligencia-artificial-nao-pode-ser-seu-psicanalista-e-talvez-nem-mesmo-um-ouvinte/
+2025-09-16 19:32:20,221 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/china-usa-tiktok-para-negociar-tarifas-com-eua-decisao-final-acontece-na-quarta-17/
+2025-09-16 19:32:20,396 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/ios-26-chega-aos-iphones-nesta-segunda-feira-15-veja-seu-aparelho-tera-a-atualizacao/
+2025-09-16 19:32:20,577 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/tiktok-secretario-dos-eua-diz-que-china-fez-exigencia-muito-agressiva-sobre-venda-do-aplicativo/
+2025-09-16 19:32:20,780 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/quanto-custa-assinar-os-12-streamings-mais-populares-no-brasil/
+2025-09-16 19:32:23,065 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/dona-da-rolling-stone-processa-google-por-resumo-de-ia-no-buscador/
+2025-09-16 19:32:23,242 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/reino-unido-e-eua-assinarao-acordo-tecnologico-revolucionario-em-visita-de-trump/
+2025-09-16 19:32:23,427 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/china-anuncia-investigacao-antidumping-contra-chips-dos-eua/
+2025-09-16 19:32:23,609 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/traducao-em-tempo-real-apple-google-e-meta-avancam-com-tecnologia-em-fones-e-celulares/
+2025-09-16 19:32:23,789 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/apos-queda-do-governo-no-nepal-145-mil-pessoas-discutem-sucessao-em-chat-no-discord/
+2025-09-16 19:32:23,993 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/tecnologia/prevista-para-esta-sexta-pre-venda-do-iphone-air-e-adiada-na-china-por-impasse-sobre-esim/
+2025-09-16 19:32:25,771 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://exame.com/tecnologia/ultimas-noticias/
+2025-09-16 19:32:26,537 - cache_manager - INFO - Cache expirado para analysis:https://exame.com/negocios/
+2025-09-16 19:32:27,550 - cache_manager - INFO - Cache expirado para analysis:https://exame.com/negocios/
+2025-09-16 19:32:30,252 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/imperio-de-games-com-moeda-propria-e-jovens-desenvolvedores-roblox-movimentou-us-1-bi-em-2024/
+2025-09-16 19:32:32,423 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/fundada-em-cidade-com-8-mil-habitantes-em-sc-rudnik-ganha-o-mundo-e-fatura-r-100-milhoes/
+2025-09-16 19:32:34,577 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/por-que-um-dos-cientistas-de-ia-mais-brilhantes-do-mundo-trocou-os-eua-pela-china-tenho-que-fazer-isso/
+2025-09-16 19:32:34,758 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/roberto-justus-tem-um-plano-para-faturar-r-1-bilhao-com-ajuda-do-minha-casa-minha-vida/
+2025-09-16 19:32:37,235 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/dolar-baixo-destrava-nova-ameaca-para-esta-industria-paulista-de-embreagens-a-concorrencia-chinesa/
+2025-09-16 19:32:37,441 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/gigante-italiana-investe-r-45-milhoes-em-centro-de-distribuicao-e-projeta-dobrar-producao-no-brasil/
+2025-09-16 19:32:37,627 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/com-tarifaco-enchente-e-pandemia-calcadista-gaucha-anuncia-falencia-com-dividas-de-r-183-milhoes/
+2025-09-16 19:32:37,803 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/como-as-vendas-de-youtube-reddit-e-instagram-tiraram-seus-fundadores-da-lista-de-bilionarios/
+2025-09-16 19:32:38,040 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/gigante-de-r-3-bilhoes-dona-das-marcas-karina-kolene-e-ox-esta-de-olho-num-novo-publico/
+2025-09-16 19:32:38,241 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/gigante-dos-dados-investe-em-startup-de-florianopolis-em-que-ate-bill-gates-e-cliente/
+2025-09-16 19:32:38,453 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/99-anuncia-investimento-de-r-6-bilhoes-em-motos-e-bicicletas-eletricas-para-entregadores/
+2025-09-16 19:32:38,641 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/99-dobra-investimento-em-delivery-para-r-2-bilhoes-no-brasil/
+2025-09-16 19:32:39,587 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/inscricoes-para-o-premio-melhores-dos-negocios-internacionais-vao-ate-o-dia-19/
+2025-09-16 19:32:41,758 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/afya-instituto-condicoes-cronicas-nao-transmissiveis-no-brasil/
+2025-09-16 19:32:41,941 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/ceo-da-openai-revela-nao-ter-boa-noite-de-sono-desde-criacao-do-chatgpt/
+2025-09-16 19:32:42,137 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/irmaos-transformam-bar-do-ori-em-florianopolis-em-rede-que-vende-1-milhao-de-almondegas-por-ano/
+2025-09-16 19:32:42,443 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/do-food-truck-ao-shark-tank-como-gabriel-farrel-criou-a-rede-de-pizzarias-borda-e-lenha/
+2025-09-16 19:32:42,740 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/o-novo-passo-bilionario-de-roberto-justus-na-construcao-civil-casas-lego/
+2025-09-16 19:32:42,982 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/startup-summit-e-um-marco-para-o-protagonismo-feminino-de-35-em-2025-pode-crescer-para-45-em-2026/
+2025-09-16 19:32:44,233 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/cimed-milky-moo-e-mais-neex-road-show-reune-grandes-empresarios-em-goiania/
+2025-09-16 19:32:44,432 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/de-uma-viagem-ao-alasca-ao-boom-pandemico-nasce-uma-fusao-para-resolver-o-caos-do-trabalho-hibrido/
+2025-09-16 19:32:44,612 - cache_manager - INFO - Cache válido encontrado para analysis:https://exame.com/negocios/engenheiro-cria-rival-do-google-na-lavanderia-de-casa-e-ele-so-precisou-de-ia-e-pecas-velhas/
+2025-09-16 19:32:45,071 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://exame.com/negocios/ultimas-noticias/
+2025-09-16 19:32:45,434 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://exame.com/tecnologia/
+2025-09-16 19:32:45,844 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://exame.com/tecnologia/examelab/
+2025-09-16 19:32:46,478 - web_scraper - INFO - Exame: 36 artigos
+2025-09-16 19:32:47,842 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://canaltech.com.br/ciencia/
+2025-09-16 19:32:48,375 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/retrocesso-imensuravel-ia-ameaca-o-aprendizado-da-escrita-critica-autor/
+2025-09-16 19:32:48,554 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/openai-mais-gente-usa-o-chatgpt-para-a-vida-pessoal-do-que-para-o-trabalho/
+2025-09-16 19:32:48,758 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/ia-pode-ser-um-caminho-para-a-fe-de-uma-geracao-que-nunca-foi-a-uma-igreja/
+2025-09-16 19:32:48,945 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/o-que-e-a-teoria-da-internet-morta-e-por-que-sam-altman-deu-prazo-de-tres-anos/
+2025-09-16 19:32:49,353 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/avaliadores-de-ia-como-trabalham-os-humanos-que-treinam-o-gemini-do-google/
+2025-09-16 19:32:49,527 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/definicao-de-copyright-e-usada-em-processo-de-dicionario-contra-a-propria-ia/
+2025-09-16 19:32:49,955 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/musicos-acusam-a-ia-de-roubar-plays-em-aplicativos-de-streaming-entenda-como/
+2025-09-16 19:32:50,337 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/chatgpt-gemini-e-claude-respondem-a-perguntas-de-alto-risco-a-sua-saude-mental/
+2025-09-16 19:32:50,519 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/a-ia-engole-uma-garrafa-de-agua-em-toda-conversa-fiada-compare-com-outros-usos/
+2025-09-16 19:32:50,690 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/incentivo-a-adivinhacao-openai-diz-ter-descoberto-por-que-o-chatgpt-alucina/
+2025-09-16 19:32:50,861 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/ia-pode-tornar-smartphones-ultrapassados-4-previsoes-de-substitutos-a-altura/
+2025-09-16 19:32:51,026 - cache_manager - INFO - Cache válido encontrado para analysis:https://canaltech.com.br/inteligencia-artificial/agora-existe-um-darwin-awards-para-saudar-os-erros-mais-estupidos-da-ia-em-2025/
+2025-09-16 19:32:51,692 - web_scraper - INFO - Canaltech: 11 artigos
+2025-09-16 19:32:54,590 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/
+2025-09-16 19:32:56,736 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/agronegocio/
+2025-09-16 19:32:58,846 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/educacao/
+2025-09-16 19:33:00,868 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/inteligencia-artificial/
+2025-09-16 19:33:04,394 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/saude-articles/
+2025-09-16 19:33:06,743 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/tecnologia-articles/
+2025-09-16 19:33:08,819 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/hardware/
+2025-09-16 19:33:10,855 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/llm-articles/
+2025-09-16 19:33:12,904 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/redes-neurais/
+2025-09-16 19:33:16,784 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/
+2025-09-16 19:33:18,833 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/agronegocio/
+2025-09-16 19:33:20,850 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/educacao/
+2025-09-16 19:33:22,935 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/inteligencia-artificial/
+2025-09-16 19:33:24,931 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/saude-articles/
+2025-09-16 19:33:27,068 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/tecnologia-articles/
+2025-09-16 19:33:29,168 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/hardware/
+2025-09-16 19:33:31,346 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/llm-articles/
+2025-09-16 19:33:33,649 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://ainews.net.br/c/artigos/redes-neurais/
+2025-09-16 19:33:35,082 - web_scraper - INFO - AINEWS: 0 artigos
+2025-09-16 19:33:36,790 - web_scraper - INFO - TI Inside (Top News): 0 artigos
+2025-09-16 19:33:36,855 - web_scraper - INFO - BBC Brasil: 0 artigos
+2025-09-16 19:33:42,090 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/authentication/sign-in/
+2025-09-16 19:33:42,872 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/ultimas-noticias/
+2025-09-16 19:33:43,090 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/mercados/
+2025-09-16 19:33:43,325 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/onde-investir/
+2025-09-16 19:33:43,548 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/politica/
+2025-09-16 19:33:43,921 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/economia/
+2025-09-16 19:33:44,866 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/mundo/
+2025-09-16 19:33:45,899 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/business/
+2025-09-16 19:33:46,121 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/advisor/
+2025-09-16 19:33:46,365 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/tudo-sobre/trader/
+2025-09-16 19:33:46,609 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/minhas-financas/
+2025-09-16 19:33:47,839 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/consumo/
+2025-09-16 19:33:48,782 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/esportes/
+2025-09-16 19:33:49,033 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/carreira/
+2025-09-16 19:33:49,277 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/business/global/
+2025-09-16 19:33:50,092 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/brasil/
+2025-09-16 19:33:50,377 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/saude/
+2025-09-16 19:33:50,780 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/tudo-sobre/inteligencia-artificial/
+2025-09-16 19:33:50,993 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/cotacoes/b3/indice/ibovespa/
+2025-09-16 19:33:51,203 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/ferramentas/altas-e-baixas/
+2025-09-16 19:33:51,426 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/ferramentas/cambio/
+2025-09-16 19:33:51,659 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/cotacoes/cripto/
+2025-09-16 19:33:51,883 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/cotacoes/b3/bdr/
+2025-09-16 19:33:52,115 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/cotacoes/b3/etf/
+2025-09-16 19:33:52,507 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/cotacoes/b3/fii/
+2025-09-16 19:33:52,738 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/cotacoes/nasdaq/
+2025-09-16 19:33:52,944 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/cotacoes/nyse/
+2025-09-16 19:33:53,146 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/ferramentas/juros-futuros-di/
+2025-09-16 19:33:53,356 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/ferramentas/inflacao/
+2025-09-16 19:33:53,783 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/ferramentas/simulador-xp/
+2025-09-16 19:33:54,111 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/ferramentas/comparador-de-fundos/
+2025-09-16 19:33:54,470 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/ferramentas/comparador-renda-fixa/
+2025-09-16 19:33:54,707 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/ferramentas/carteira-de-acompanhamento/
+2025-09-16 19:33:55,165 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/cotacoes/empresas-b3/
+2025-09-16 19:33:56,072 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/conteudos/
+2025-09-16 19:33:56,408 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/conteudos/cursos/
+2025-09-16 19:33:56,768 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/conteudos/ebooks/
+2025-09-16 19:33:57,092 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/conteudos/planilhas/
+2025-09-16 19:33:57,461 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/guias/
+2025-09-16 19:33:58,010 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/patrocinados/
+2025-09-16 19:33:58,527 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/ferramentas/simulador-xp/?utm_source=infomoney&utm_medium=simulador-ticker&utm_campaign=simulador-xp
+2025-09-16 19:33:58,882 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/
+2025-09-16 19:33:59,096 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/business/microsoft-vai-investir-r-150-bilhoes-em-infraestrutura-de-ia-no-reino-unido-ate-2028/
+2025-09-16 19:33:59,306 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/business/global/no-que-exatamente-as-empresas-de-ia-vao-gastar-us-325-bi-ate-o-fim-do-ano-entenda/
+2025-09-16 19:33:59,517 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/business/apos-o-primeiro-bilhao-g4-quer-triplicar-receita-com-ia-e-marketplace-ate-2027/
+2025-09-16 19:33:59,717 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/carreira/apesar-do-medo-ia-tem-mais-ajudado-do-que-substituido-pessoas-dizem-executivos/
+2025-09-16 19:33:59,922 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/carreira/cientista-ganhador-do-nobel-aponta-qual-deve-ser-habilidade-crucial-para-nova-geracao/
+2025-09-16 19:34:00,140 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/consumo/como-fazer-trend-carro-em-miniatura-ia/
+2025-09-16 19:34:00,344 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/business/google-cloud-avalia-tornar-brasil-um-hub-para-treinamento-de-modelos-de-ia/
+2025-09-16 19:34:00,560 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/consumo/tudo-sobre-airpods-pro-3-com-traducao-ao-vivo/
+2025-09-16 19:34:01,135 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/tudo-sobre/trader
+2025-09-16 19:34:01,374 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/colunistas/
+2025-09-16 19:34:01,885 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/web-stories/
+2025-09-16 19:34:02,252 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/quem-somos/
+2025-09-16 19:34:27,173 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.infomoney.com.br/wp-content/uploads/2024/05/TabeladeValores-InfoMoney2024.pdf
+2025-09-16 19:34:52,445 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/politica-de-privacidade/
+2025-09-16 19:34:52,691 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/politica-de-cookies/
+2025-09-16 19:34:52,924 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/tudo-sobre/inteligencia-artificial/#siteFooter
+2025-09-16 19:34:53,129 - cache_manager - INFO - Cache válido encontrado para analysis:https://www.infomoney.com.br/fale-conosco/
+2025-09-16 19:34:53,631 - web_scraper - INFO - InfoMoney IA: 34 artigos
+2025-09-16 19:34:54,048 - web_scraper - INFO - IA Expert Blog: 0 artigos
+2025-09-16 19:34:55,748 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/politica/noticia/2025/09/em-julgamento-realizado-em-porto-alegre-jair-bolsonaro-e-condenado-por-discriminacao-racial-cmfmrl0up009g01edl44e6965.html
+2025-09-16 19:34:56,455 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/cultura-e-lazer/tv/noticia/2025/09/marco-aurelio-morre-em-vale-tudo-descubra-o-que-aconteceu-na-primeira-versao-da-novela-cmfmua9hv00oi014yx4e70abk.html
+2025-09-16 19:34:57,039 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/educacao/concursos/noticia/2025/09/igp-rs-publica-edital-de-concurso-com-mais-de-230-vagas-e-salarios-de-ate-r-17-mil-cmfmqvf3i00ma013c3cs0vv61.html
+2025-09-16 19:34:57,604 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/politica/noticia/2025/09/pec-da-blindagem-e-pautada-por-motta-e-deve-ser-votada-nesta-terca-feira-cmfmqqc3h00m7013cdpotnu3w.html
+2025-09-16 19:34:58,557 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/cultura-e-lazer/cinema/noticia/2025/09/morre-o-ator-e-diretor-robert-redford-aos-89-anos-cmfmis60k00i3013cjycfc8fy.html
+2025-09-16 19:34:59,501 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/
+2025-09-16 19:35:00,268 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/ultimas-noticias/
+2025-09-16 19:35:00,876 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://gauchazh.clicrbs.com.br/gaucha/
+2025-09-16 19:35:01,826 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/esportes/inter/ultimas-noticias/
+2025-09-16 19:35:02,571 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/esportes/gremio/ultimas-noticias/
+2025-09-16 19:35:03,010 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/destemperados/ultimas-noticias/
+2025-09-16 19:35:03,551 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/donna/ultimas-noticias/
+2025-09-16 19:35:04,050 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/bem-mais-agro/ultimas-noticias/
+2025-09-16 19:35:04,501 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://gauchazh.clicrbs.com.br/jogos/passatempos/
+2025-09-16 19:35:05,129 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/donna/horoscopo/ultimas-noticias/
+2025-09-16 19:35:06,064 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/zh-indica/ultimas-noticias/
+2025-09-16 19:35:06,492 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://gauchazh.clicrbs.com.br/recomendacao/
+2025-09-16 19:35:06,813 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://gauchazh.clicrbs.com.br/especiais/painel-da-reconstrucao/
+2025-09-16 19:35:07,690 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/geral/noticia/2018/07/podcasts-gzh-cjjuew79200b901qc9d2x98uv.html
+2025-09-16 19:35:08,356 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/videos
+2025-09-16 19:35:09,162 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/conteudo-de-marca/ultimas-noticias/
+2025-09-16 19:35:09,875 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/passo-fundo/ultimas-noticias/
+2025-09-16 19:35:10,695 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/pioneiro/ultimas-noticias/
+2025-09-16 19:35:11,155 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/porto-alegre/ultimas-noticias/
+2025-09-16 19:35:12,113 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/ambiente/ultimas-noticias
+2025-09-16 19:35:12,842 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/campo-e-lavoura/ultimas-noticias/
+2025-09-16 19:35:13,755 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/tecnologia/ultimas-noticias/
+2025-09-16 19:35:14,588 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/colunistas/a-z/
+2025-09-16 19:35:15,407 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/comportamento/ultimas-noticias/
+2025-09-16 19:35:15,966 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://gauchazh.clicrbs.com.br/opiniao/conselho-editorial/ultimas-noticias/
+2025-09-16 19:35:16,681 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/cultura-e-lazer/ultimas-noticias/
+2025-09-16 19:35:17,371 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/economia/ultimas-noticias/
+2025-09-16 19:35:18,010 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/educacao/ultimas-noticias/
+2025-09-16 19:35:18,630 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/politica/eleicoes/ultimas-noticias/
+2025-09-16 19:35:19,165 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/emprego/ultimas-noticias/
+2025-09-16 19:35:19,852 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/esportes/ultimas-noticias/
+2025-09-16 19:35:20,482 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/donna/gente/ultimas-noticias/
+2025-09-16 19:35:21,083 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/geral/ultimas-noticias/
+2025-09-16 19:35:21,760 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/grupo-de-investigacao/ultimas-noticias/
+2025-09-16 19:35:22,349 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/mundo/ultimas-noticias/
+2025-09-16 19:35:23,082 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/opiniao/ultimas-noticias/
+2025-09-16 19:35:23,530 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/politica/ultimas-noticias/
+2025-09-16 19:35:23,712 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://gauchazh.clicrbs.com.br/especiais
+2025-09-16 19:35:24,460 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/saude/ultimas-noticias/
+2025-09-16 19:35:25,003 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/seguranca/ultimas-noticias/
+2025-09-16 19:35:25,921 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/transito/ultimas-noticias/
+2025-09-16 19:35:26,894 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://gauchazh.clicrbs.com.br/viral/ultimas-noticias
+2025-09-16 19:35:27,501 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://gauchazh.clicrbs.com.br/publicidade-legal/ultimas-noticias/
+2025-09-16 19:35:28,536 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/geral/noticia/2017/09/quem-e-quem-cj7g8ssdg000401qppbd2pyj8.html
+2025-09-16 19:35:29,052 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/praticas-editoriais/
+2025-09-16 19:35:29,701 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://gauchazh.clicrbs.com.br/esportes/noticia/2024/06/sem-filtro-programa-traz-bastidores-do-futebol-diversao-e-analise-sobre-a-dupla-gre-nal-clxuy2hky0075015mkqtketwd.html
+2025-09-16 19:35:30,008 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://gauchazh.clicrbs.com.br/esportes/noticia/2024/06/sem-filtro-programa-traz-bastidores-do-futebol-diversao-e-analise-sobre-a-dupla-gre-nal-clxuy2hky0075015mkqtketwd.html
+2025-09-16 19:35:30,640 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/politica/noticia/2025/09/camara-vota-pec-da-blindagem-acompanhe-a-votacao-ao-vivo-cmfmwp5b800q1014yigzv3yof.html
+2025-09-16 19:35:31,432 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/viral/noticia/2025/09/como-fazer-miniatura-com-ia-veja-o-passo-a-passo-para-transformar-a-sua-foto-em-boneco-3d-cmflfwuj8007y014ylqp1x0w2.html
+2025-09-16 19:35:32,233 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/colunistas/rafael-martins/noticia/2025/09/o-fim-da-friccao-digital-comeca-com-uma-simples-conversa-cmfl8hdzs002201fjfcctrluh.html
+2025-09-16 19:35:32,881 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/colunistas/rafael-parente/noticia/2025/09/ia-coach-de-oratoria-como-transformar-sua-fala-baguncada-em-discurso-poderoso-com-8-dicas-imperdiveis-cmfgyitiy020b011r29mwcm57.html
+2025-09-16 19:35:33,567 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/colunistas/giane-guerra/noticia/2025/09/hotel-futurista-de-r-20-milhoes-no-litoral-tera-avatar-para-receber-hospedes-cmf1p5m5000dz015uq2056p31.html
+2025-09-16 19:35:34,148 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/colunistas/rafael-parente/noticia/2025/09/como-a-ia-ja-chegou-na-escola-do-seu-filho-e-por-que-o-professor-se-tornou-ainda-mais-essencial-cmfebap55016v0120qnlo3n5h.html
+2025-09-16 19:35:34,636 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/tecnologia/noticia/2025/09/como-fazer-boneco-3d-com-ia-veja-o-passo-a-passo-para-transformar-sua-foto-em-colecionavel-cmfdyjqxk010i01201lygoz7y.html
+2025-09-16 19:35:35,314 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/colunistas/rafael-martins/noticia/2025/09/google-lanca-modo-ia-da-busca-em-portugues-no-brasil-entenda-por-que-e-um-divisor-de-aguas-cmfbh4lgx006v01f7px13grqd.html
+2025-09-16 19:35:35,883 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/colunistas/rafael-martins/noticia/2025/09/smartlab-aproxima-tecnologia-dos-servicos-publicos-em-porto-alegre-cmf77lss0021h015icvodlkw6.html
+2025-09-16 19:35:36,547 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/tecnologia/noticia/2025/09/metade-das-habilidades-profissionais-atuais-estara-obsoleta-em-cinco-anos-diz-especialista-norte-americano-em-ia-cmf1nl0ly00dd015unds07jkr.html
+2025-09-16 19:35:37,166 - cache_manager - INFO - Cache válido encontrado para analysis:https://gauchazh.clicrbs.com.br/colunistas/rafael-parente/noticia/2025/09/por-que-seu-filho-precisa-de-um-professor-ampliado-e-nao-de-um-robo-cmf5nljf3012h01e1m0d9ovey.html
+2025-09-16 19:35:37,669 - web_scraper - INFO - GauchaZH IA: 40 artigos
+2025-09-16 19:35:38,175 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/negocios/
+2025-09-16 19:35:38,431 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/economia/
+2025-09-16 19:35:38,687 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/poder/
+2025-09-16 19:35:38,921 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/wealth-management/
+2025-09-16 19:35:39,177 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/startups/
+2025-09-16 19:35:39,426 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/finde/
+2025-09-16 19:35:39,645 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/neosummit-cop30/
+2025-09-16 19:35:39,908 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/neosummit/
+2025-09-16 19:35:40,298 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/insiders/
+2025-09-16 19:35:40,605 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/inovacao/
+2025-09-16 19:35:40,890 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/experts/
+2025-09-16 19:35:41,121 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/neoconference/
+2025-09-16 19:35:41,387 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/fome-de-urgencia/
+2025-09-16 19:35:41,611 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/anuncie/
+2025-09-16 19:35:41,859 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/noticias-sobre/inteligencia-artificial/
+2025-09-16 19:35:42,104 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://neofeed.com.br/manifesto
+2025-09-16 19:35:42,587 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/sobre-nos
+2025-09-16 19:35:42,808 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/politica-de-privacidade
+2025-09-16 19:35:43,043 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/termos-de-uso
+2025-09-16 19:35:43,322 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://neofeed.com.br/videos
+2025-09-16 19:35:43,925 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://neofeed.com.br/podcasts
+2025-09-16 19:35:44,485 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://neofeed.com.br/newsletter
+2025-09-16 19:35:44,788 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/finde/em-hollywood-a-openai-quer-ser-tambem-a-roteirista/
+2025-09-16 19:35:45,041 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/vitoria-fernandes/
+2025-09-16 19:35:45,297 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/ralphe-manzoni-jr-3-2/
+2025-09-16 19:35:45,519 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/negocios/a-apple-lancou-o-ultrafino-iphone-17-mas-os-analistas-nao-se-animaram-com-a-novidade/
+2025-09-16 19:35:45,757 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/ivan-ryngelblum/
+2025-09-16 19:35:45,986 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/economia/a-inteligencia-artificial-vai-substituir-o-analista-de-acoes-um-teste-mostrou-quem-seria-o-estagiario/
+2025-09-16 19:35:46,232 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/jose-eduardo-barella/
+2025-09-16 19:35:46,479 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/economia/como-a-china-atraiu-a-iniciativa-privada-para-os-negocios-militares/
+2025-09-16 19:35:46,860 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/letycia-cardoso/
+2025-09-16 19:35:47,102 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/negocios/anthropic-capta-us-13-bilhoes-isso-mesmo-bilhoes-e-triplica-seu-valor-de-mercado/
+2025-09-16 19:35:47,363 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/moacir-drska/
+2025-09-16 19:35:47,608 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/negocios/teses-de-inteligencia-artificial-impulsionam-bolsa-da-china-e-atraem-investidores-estrangeiros/
+2025-09-16 19:35:47,864 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/guilherme-guilherme/
+2025-09-16 19:35:48,235 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/finde/o-museu-frances-pompidou-encontra-seu-lugar-no-brasil-entre-tijolos-e-cataratas/
+2025-09-16 19:35:48,476 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/noticias-sobre/arte/
+2025-09-16 19:35:48,734 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/karina-gomes/
+2025-09-16 19:35:48,974 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/finde/por-que-o-abolicionismo-penal-de-angela-davis-diz-respeito-a-todos-nos/
+2025-09-16 19:35:49,204 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/noticias-sobre/livro/
+2025-09-16 19:35:49,442 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/goncalo-junior/
+2025-09-16 19:35:49,694 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/finde/em-uma-vila-cearense-um-hotel-que-surgiu-de-um-burnout/
+2025-09-16 19:35:49,935 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/noticias-sobre/turismo/
+2025-09-16 19:35:50,302 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/mari-campos/
+2025-09-16 19:35:50,573 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/finde/a-vertigem-que-eternizou-e-mudou-a-carreira-de-kim-novak/
+2025-09-16 19:35:50,846 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/noticias-sobre/documentario/
+2025-09-16 19:35:51,083 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/elaine-guerini/
+2025-09-16 19:35:51,347 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/poder/tres-motivos-levam-o-brasil-a-ponderar-a-retaliacao-aos-eua-com-a-quebra-de-patentes/
+2025-09-16 19:35:51,598 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/leonardo-cavalcanti/
+2025-09-16 19:35:51,871 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/marcio-kroehn/
+2025-09-16 19:35:52,117 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/autor/patricia-valle/
+2025-09-16 19:35:52,378 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/noticias-sobre/inteligencia-artificial/#close-modal
+2025-09-16 19:35:52,621 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/sobre-nos/
+2025-09-16 19:35:52,839 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/politica-de-privacidade/
+2025-09-16 19:35:53,064 - cache_manager - INFO - Cache válido encontrado para analysis:https://neofeed.com.br/termos-de-uso/
+2025-09-16 19:35:53,297 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://neofeed.com.br/mapa-do-site/
+2025-09-16 19:35:54,046 - web_scraper - INFO - NeoFeed IA: 44 artigos
+2025-09-16 19:35:55,050 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/
+2025-09-16 19:35:55,504 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/
+2025-09-16 19:35:55,704 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/meta-deve-anunciar-novos-oculos-inteligentes-de-ia-entenda/
+2025-09-16 19:35:56,238 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/meta-deve-anunciar-novos-oculos-inteligentes-de-ia-entenda/
+2025-09-16 19:35:56,432 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/phelipe-siani-explica-o-que-muda-na-linha-iphone-17-estranho-de-segurar/
+2025-09-16 19:35:56,922 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/phelipe-siani-explica-o-que-muda-na-linha-iphone-17-estranho-de-segurar/
+2025-09-16 19:35:57,124 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/executivo-da-apple-fala-a-cnn-e-revela-detalhes-do-iphone-17/
+2025-09-16 19:35:57,448 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/executivo-da-apple-fala-a-cnn-e-revela-detalhes-do-iphone-17/
+2025-09-16 19:35:57,642 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/melhor-fotografia-astronomica-de-2025-veja-os-vencedores-do-premio-anual/
+2025-09-16 19:35:57,959 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/melhor-fotografia-astronomica-de-2025-veja-os-vencedores-do-premio-anual/
+2025-09-16 19:35:58,151 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/descarte-indevido-de-plastico-ajuda-a-contaminar-a-amazonia-alerta-fiocruz/
+2025-09-16 19:35:58,490 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/descarte-indevido-de-plastico-ajuda-a-contaminar-a-amazonia-alerta-fiocruz/
+2025-09-16 19:35:58,675 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/experimento-recria-sons-de-dinossauros-de-70-milhoes-de-anos-ouca/
+2025-09-16 19:35:59,256 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/experimento-recria-sons-de-dinossauros-de-70-milhoes-de-anos-ouca/
+2025-09-16 19:35:59,450 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/atualizacao-do-ios-26-divide-opinioes-na-web-confira/
+2025-09-16 19:35:59,771 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/atualizacao-do-ios-26-divide-opinioes-na-web-confira/
+2025-09-16 19:35:59,959 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/samsung-libera-one-ui-8-para-dispositivos-galaxy-veja-o-que-muda/
+2025-09-16 19:36:00,437 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/samsung-libera-one-ui-8-para-dispositivos-galaxy-veja-o-que-muda/
+2025-09-16 19:36:00,628 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/polaroid-com-o-idolo-na-ia-veja-passo-a-passo-para-criar/
+2025-09-16 19:36:01,011 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/polaroid-com-o-idolo-na-ia-veja-passo-a-passo-para-criar/
+2025-09-16 19:36:01,256 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/cientistas-descobrem-evidencia-mais-antiga-conhecida-de-mumificacao-humana/
+2025-09-16 19:36:01,841 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/cientistas-descobrem-evidencia-mais-antiga-conhecida-de-mumificacao-humana/
+2025-09-16 19:36:02,050 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/cantores-criados-por-ia-ganham-espaco-no-mercado-musical-entenda/
+2025-09-16 19:36:02,407 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/cantores-criados-por-ia-ganham-espaco-no-mercado-musical-entenda/
+2025-09-16 19:36:02,626 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/supercomputador-e-laboratorio-de-ia-sao-inaugurados-na-unb/
+2025-09-16 19:36:03,140 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/supercomputador-e-laboratorio-de-ia-sao-inaugurados-na-unb/
+2025-09-16 19:36:03,331 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/pre-venda-do-iphone-17-comeca-nesta-terca-feira-16-veja-como-comprar/
+2025-09-16 19:36:03,668 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/pre-venda-do-iphone-17-comeca-nesta-terca-feira-16-veja-como-comprar/
+2025-09-16 19:36:03,855 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://www.cnnbrasil.com.br/tecnologia/internet-da-starlink-e-interrompida-nesta-segunda-milhares-foram-afetados/
+2025-09-16 19:36:04,183 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://www.cnnbrasil.com.br/tecnologia/internet-da-starlink-e-interrompida-nesta-segunda-milhares-foram-afetados/
+2025-09-16 19:36:04,698 - web_scraper - INFO - CNN Brasil Tecnologia: 6 artigos
+2025-09-16 19:36:05,343 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/
+2025-09-16 19:36:05,834 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/confianca-fornecedores-se-tornou-maior-risco/
+2025-09-16 19:36:06,334 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/confianca-fornecedores-se-tornou-maior-risco/
+2025-09-16 19:36:06,575 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/coreweave-acordo-bilionario-nvidia-nuvem/
+2025-09-16 19:36:07,060 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/coreweave-acordo-bilionario-nvidia-nuvem/
+2025-09-16 19:36:07,355 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/claro-empresas-fabrica-sap/
+2025-09-16 19:36:07,727 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/claro-empresas-fabrica-sap/
+2025-09-16 19:36:07,981 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/i-b-logistica-reduz-tombamentos/
+2025-09-16 19:36:08,426 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/i-b-logistica-reduz-tombamentos/
+2025-09-16 19:36:08,678 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/elon-musk-compra-us-1-bi-acoes-tesla/
+2025-09-16 19:36:09,087 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/elon-musk-compra-us-1-bi-acoes-tesla/
+2025-09-16 19:36:09,331 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/alphabet-alcanca-us-3-trilhoes-valor-mercado/
+2025-09-16 19:36:09,823 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/alphabet-alcanca-us-3-trilhoes-valor-mercado/
+2025-09-16 19:36:10,130 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/indicium-aporte-databricks/
+2025-09-16 19:36:10,536 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/indicium-aporte-databricks/
+2025-09-16 19:36:12,454 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/varejo-automacao-2030/
+2025-09-16 19:36:12,827 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/varejo-automacao-2030/
+2025-09-16 19:36:14,998 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/vibe-coding-ferramenta-resultados/
+2025-09-16 19:36:15,409 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/vibe-coding-ferramenta-resultados/
+2025-09-16 19:36:15,757 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://itforum.com.br/noticias/seis-erros-produtos-digitais/
+2025-09-16 19:36:16,151 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://itforum.com.br/noticias/seis-erros-produtos-digitais/
+2025-09-16 19:36:16,654 - web_scraper - INFO - IT Forum: 10 artigos
+2025-09-16 19:36:17,921 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/
+2025-09-16 19:36:18,895 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/
+2025-09-16 19:36:19,673 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/09/startup-de-robotica-figure-e-avaliada-em-us-39-bilhoes-em-rodada-de-financiamento/
+2025-09-16 19:36:20,141 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/09/startup-de-robotica-figure-e-avaliada-em-us-39-bilhoes-em-rodada-de-financiamento/
+2025-09-16 19:36:20,489 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/09/conheca-as-10-nacoes-superpotencias-da-ia/
+2025-09-16 19:36:20,914 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/09/conheca-as-10-nacoes-superpotencias-da-ia/
+2025-09-16 19:36:23,721 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/09/toda-empresa-deve-se-tornar-uma-ai-first-company-e-voce-precisa-se-preparar-para-isso/
+2025-09-16 19:36:24,114 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/09/toda-empresa-deve-se-tornar-uma-ai-first-company-e-voce-precisa-se-preparar-para-isso/
+2025-09-16 19:36:24,977 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/09/google-lanca-modo-ia-em-portugues-e-acelera-integracao-as-buscas-no-brasil/
+2025-09-16 19:36:25,486 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/09/google-lanca-modo-ia-em-portugues-e-acelera-integracao-as-buscas-no-brasil/
+2025-09-16 19:36:27,241 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/09/esqueca-o-seo-as-novas-estrategias-do-trafego-digital-na-era-da-ia/
+2025-09-16 19:36:27,616 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/09/esqueca-o-seo-as-novas-estrategias-do-trafego-digital-na-era-da-ia/
+2025-09-16 19:36:29,574 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/09/os-chatbots-de-ia-estao-fornecendo-mais-informacoes-falsas-do-que-nunca/
+2025-09-16 19:36:29,950 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/09/os-chatbots-de-ia-estao-fornecendo-mais-informacoes-falsas-do-que-nunca/
+2025-09-16 19:36:32,452 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/09/a-ia-na-borda-uma-oportunidade-estrategica-para-os-negocios/
+2025-09-16 19:36:32,958 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/09/a-ia-na-borda-uma-oportunidade-estrategica-para-os-negocios/
+2025-09-16 19:36:36,132 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/09/nano-banana-conheca-a-ferramenta-de-ia-do-google-para-imagens-que-viralizou/
+2025-09-16 19:36:36,545 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/09/nano-banana-conheca-a-ferramenta-de-ia-do-google-para-imagens-que-viralizou/
+2025-09-16 19:36:39,793 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/09/negocios-e-regulamentacao-da-ia-o-que-muda-com-a-chegada-da-openai-ao-brasil/
+2025-09-16 19:36:40,194 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/09/negocios-e-regulamentacao-da-ia-o-que-muda-com-a-chegada-da-openai-ao-brasil/
+2025-09-16 19:36:44,054 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2025/08/bolha-da-ia-e-uma-possibilidade-diz-gary-bolles/
+2025-09-16 19:36:44,505 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2025/08/bolha-da-ia-e-uma-possibilidade-diz-gary-bolles/
+2025-09-16 19:36:45,274 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/noticias-sobre/tecnologia/
+2025-09-16 19:36:45,701 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/noticias-sobre/tecnologia/
+2025-09-16 19:36:45,954 - cache_manager - INFO - Chave não encontrada no cache: analysis:https://forbes.com.br/forbes-tech/2024/03/forbes-brasil-nightcap-reune-nomes-de-destaque-em-austin/
+2025-09-16 19:36:46,349 - cache_manager - INFO - Cache salvo com sucesso: analysis:https://forbes.com.br/forbes-tech/2024/03/forbes-brasil-nightcap-reune-nomes-de-destaque-em-austin/
+2025-09-16 19:36:46,852 - web_scraper - INFO - Forbes Brasil (IA): 11 artigos
+2025-09-16 19:36:52,706 - __main__ - INFO - 
+============================================================
+2025-09-16 19:36:52,707 - __main__ - INFO - RELATÓRIO FINAL DA COLETA (HÍBRIDO)
+2025-09-16 19:36:52,707 - __main__ - INFO - ============================================================
+2025-09-16 19:36:52,740 - __main__ - INFO - Tempo total: 318.41s
+2025-09-16 19:36:52,740 - __main__ - INFO - RSS: 13 | Scraping: 207
+2025-09-16 19:36:52,740 - __main__ - INFO - Removidos (URL): 0 | Removidos (título): 13
+2025-09-16 19:36:52,741 - __main__ - INFO - Total de artigos de IA: 207
+2025-09-16 19:36:52,741 - __main__ - INFO - ============================================================
+2025-09-16 19:36:52,766 - __main__ - INFO - Resultados salvos em: outputs/collection_20250916_193652.json
+2025-09-16 19:36:52,795 - __main__ - INFO - Resultados também salvos como: outputs/latest_collection.json

@@ -751,6 +751,7 @@
                 const seg = stats.segmentation_stats || {};
                 const gen = stats.generation_stats || {};
                 const srcq = stats.source_quality || {};
+                const kw = stats.keywords_by_segment || {};
 
                 let html = `
                     <div class="stats-grid">
@@ -815,6 +816,38 @@
                     html += '</ul>';
                     html += '</div>';
                 }
+
+                // Palavras‑chave por segmento (Top 15)
+                const kwSegs = Object.keys(kw);
+                if (kwSegs.length) {
+                    html += '<h4 style="margin-top:20px;">Palavras‑chave por segmento (Top 15)</h4>';
+                    kwSegs.forEach(skey => {
+                        const items = kw[skey] || [];
+                        html += '<div class="stat-card" style="margin-top:10px;">';
+                        html += `<div style="font-weight:600; margin-bottom:6px;">${skey}</div>`;
+                        if (!items.length) {
+                            html += '<div style="color:#666;">Sem dados</div>';
+                        } else {
+                            html += '<ul style="margin-left:16px; columns: 2; -webkit-columns: 2; -moz-columns: 2;">';
+                            items.slice(0,20).forEach(pair => {
+                                const w = pair[0];
+                                const c = pair[1];
+                                html += `<li>${w}: ${c}</li>`;
+                            });
+                            html += '</ul>';
+                        }
+                        html += '</div>';
+                    });
+                }
+
+                // Logs embutidos
+                html += '<h4 style="margin-top:20px;">Logs</h4>';
+                html += '<div class="stat-card" style="margin-top:10px;">';
+                html += '<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">';
+                html += '<div><div style="font-weight:600;">collector.log</div><iframe src="/api/logs/collector" style="width:100%; height:280px; border:1px solid #ddd; border-radius:6px; background:#fff;"></iframe></div>';
+                html += '<div><div style="font-weight:600;">pipeline.log</div><iframe src="/api/logs/pipeline" style="width:100%; height:280px; border:1px solid #ddd; border-radius:6px; background:#fff;"></iframe></div>';
+                html += '</div>';
+                html += '</div>';
 
                 container.innerHTML = html;
             } catch (error) {
