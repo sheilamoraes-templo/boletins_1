@@ -37,8 +37,12 @@ class WebScrapingCollector:
             'ainews.net.br': re.compile(r"/(inteligencia-artificial|artigos)/", re.I),
             'tiinside.com.br': re.compile(r"/(top-news|inteligencia-artificial)/", re.I),
             'www.bbc.com': re.compile(r"/portuguese/", re.I),
+            'www.infomoney.com.br': re.compile(r"/", re.I),
+            'iaexpert.academy': re.compile(r"/", re.I),
+            'gauchazh.clicrbs.com.br': re.compile(r"/", re.I),
+            'neofeed.com.br': re.compile(r"/", re.I),
         }
-        self.block_paths = re.compile(r"/(tag|topics|maispopulares|folha-topicos|page|live|flash|ao-vivo|video|videos|podcast|webstories|guia|oferta|ofertas|newsletter|podcasts|videos|elementor-action)/", re.I)
+        self.block_paths = re.compile(r"/(tag|topics|maispopulares|folha-topicos|page|live|flash|ao-vivo|video|videos|podcast|webstories|guia|oferta|ofertas|podcasts|videos|elementor-action)/", re.I)
         self.ai_terms = [k.lower() for k in Config.AI_KEYWORDS]
         self.block_terms = [k.lower() for k in Config.BLOCKED_KEYWORDS]
 
@@ -142,11 +146,17 @@ class WebScrapingCollector:
 
     def _extract_articles_from_html(self, html: str, source_name: str, page_url: str) -> List[Dict[str, Any]]:
         soup = BeautifulSoup(html, 'html.parser')
+        try:
+            host = urlparse(page_url).netloc.lower()
+            path = urlparse(page_url).path.lower()
+        except Exception:
+            host = ''
+            path = ''
+
         # Seleção base
         candidates = soup.select('article a, .post a, .news-item a, h2 a, h3 a, a[href]')
         # Ajuste por domínio (melhor assertividade)
         try:
-            host = urlparse(page_url).netloc.lower()
             if 'tiinside.com.br' in host:
                 domain_specific = soup.select('.td-module-title a, h3.entry-title a, article .entry-title a')
                 if domain_specific:
@@ -155,6 +165,7 @@ class WebScrapingCollector:
                 domain_specific = soup.select('a.feed-post-link, .feed-post-body-title a, h2 a')
                 if domain_specific:
                     candidates = domain_specific
+            
         except Exception:
             pass
         articles: List[Dict[str, Any]] = []

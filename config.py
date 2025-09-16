@@ -51,16 +51,13 @@ class Config:
     NEWS_SOURCES = {
         'G1': {
             'rss_feeds': [
-                'https://g1.globo.com/rss/g1/tecnologia/',
-                'https://g1.globo.com/rss/g1/economia/',
-                'https://g1.globo.com/rss/g1/ciencia-e-saude/',
+                'https://g1.globo.com/rss/g1/tecnologia/'
             ],
             'base_url': 'https://g1.globo.com'
         },
         'UOL': {
             'rss_feeds': [
-                'https://rss.uol.com.br/feed/tecnologia.xml',
-                'https://rss.uol.com.br/feed/economia.xml',
+                'https://rss.uol.com.br/feed/tecnologia.xml'
             ],
             'base_url': 'https://www.uol.com.br'
         },
@@ -82,11 +79,11 @@ class Config:
     SCRAPING_SOURCES = {
         'G1': {
             'base_url': 'https://g1.globo.com',
-            'sections': ['/tecnologia/', '/economia/', '/ciencia-e-saude/']
+            'sections': ['/tecnologia/']
         },
         'UOL': {
             'base_url': 'https://www.uol.com.br',
-            'sections': ['/tilt/', '/economia/']
+            'sections': ['/tilt/']
         },
         'Exame': {
             'base_url': 'https://exame.com',
@@ -107,6 +104,22 @@ class Config:
         'BBC Brasil': {
             'base_url': 'https://www.bbc.com',
             'sections': ['/portuguese/topics/c340q0gy0n5t']  # Tecnologia (Português)
+        },
+        'InfoMoney IA': {
+            'base_url': 'https://www.infomoney.com.br',
+            'sections': ['/tudo-sobre/inteligencia-artificial/']
+        },
+        'IA Expert Blog': {
+            'base_url': 'https://iaexpert.academy',
+            'sections': ['/blog/']
+        },
+        'GauchaZH IA': {
+            'base_url': 'https://gauchazh.clicrbs.com.br',
+            'sections': ['/ultimas-noticias/tag/inteligencia-artificial/']
+        },
+        'NeoFeed IA': {
+            'base_url': 'https://neofeed.com.br',
+            'sections': ['/noticias-sobre/inteligencia-artificial/']
         }
     }
     

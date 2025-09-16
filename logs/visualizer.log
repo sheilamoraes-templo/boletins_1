@@ -184,3 +184,128 @@
  * Running on http://127.0.0.1:5000
 2025-09-15 01:07:19,239 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
 2025-09-15 01:07:25,846 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 01:07:25] "GET / HTTP/1.1" 200 -
+2025-09-15 21:40:52,535 - __main__ - INFO - (Re)criando template HTML...
+2025-09-15 21:40:52,574 - __main__ - INFO - Template HTML criado com sucesso
+2025-09-15 21:40:52,580 - __main__ - INFO - Visualizador inicializado em 127.0.0.1:5000
+2025-09-15 21:40:52,581 - __main__ - INFO - Iniciando servidor web em 127.0.0.1:5000
+2025-09-15 21:40:52,608 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-15 21:40:52,609 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-15 21:41:22,885 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:41:22] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:41:22,922 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:41:22] "GET /api/stats HTTP/1.1" 200 -
+2025-09-15 21:41:24,397 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:41:24] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:41:24,458 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:41:24] "GET /api/bulletins/view/recursos_humanos_gestao_pessoas HTTP/1.1" 200 -
+2025-09-15 21:41:32,521 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:41:32] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:41:32,523 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:41:32] "GET /api/bulletins/view/marketing_comunicacao_jornalismo HTTP/1.1" 200 -
+2025-09-15 21:41:32,645 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:41:32] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:41:32,692 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:41:32] "GET /api/stats HTTP/1.1" 200 -
+2025-09-15 21:42:02,631 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:42:02] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:42:02,671 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:42:02] "GET /api/stats HTTP/1.1" 200 -
+2025-09-15 21:42:32,647 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:42:32] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:42:32,694 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:42:32] "GET /api/stats HTTP/1.1" 200 -
+2025-09-15 21:43:03,114 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:03] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:43:03,142 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:03] "GET /api/stats HTTP/1.1" 200 -
+2025-09-15 21:43:27,656 - __main__ - INFO - (Re)criando template HTML...
+2025-09-15 21:43:27,658 - __main__ - INFO - Template HTML criado com sucesso
+2025-09-15 21:43:27,665 - __main__ - INFO - Visualizador inicializado em 127.0.0.1:5000
+2025-09-15 21:43:27,665 - __main__ - INFO - Iniciando servidor web em 127.0.0.1:5000
+2025-09-15 21:43:27,696 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-15 21:43:27,696 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-15 21:43:31,290 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:31] "GET / HTTP/1.1" 200 -
+2025-09-15 21:43:31,464 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:31] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:43:33,476 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:33] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:43:33,476 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:33] "GET /api/bulletins/view/direito_corporativo_tributario_trabalhista HTTP/1.1" 200 -
+2025-09-15 21:43:36,770 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:36] "GET /api/bulletins/view/marketing_comunicacao_jornalismo HTTP/1.1" 200 -
+2025-09-15 21:43:36,775 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:36] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:43:38,866 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:38] "GET /api/bulletins/view/recursos_humanos_gestao_pessoas HTTP/1.1" 200 -
+2025-09-15 21:43:38,873 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:38] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:43:40,000 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:40] "GET /api/pipeline_results HTTP/1.1" 200 -
+2025-09-15 21:43:43,651 - email_sender - ERROR - Campos faltantes: EMAIL_USER, EMAIL_PASSWORD
+2025-09-15 21:43:43,651 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:43:43] "[31m[1mPOST /api/email/send-latest HTTP/1.1[0m" 400 -
+2025-09-15 21:44:02,094 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:44:02] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:44:32,081 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:44:32] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:45:02,068 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:45:02] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:45:32,087 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:45:32] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:46:02,092 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:46:02] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:46:31,461 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:46:31] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:46:31,840 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:46:31] "GET / HTTP/1.1" 200 -
+2025-09-15 21:46:31,917 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:46:31] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:46:35,293 - email_sender - ERROR - Campos faltantes: EMAIL_USER, EMAIL_PASSWORD
+2025-09-15 21:46:35,293 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:46:35] "[31m[1mPOST /api/email/send-latest HTTP/1.1[0m" 400 -
+2025-09-15 21:46:46,885 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:46:46] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-09-15 21:47:01,906 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:47:01] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:47:31,919 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:47:31] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:48:01,908 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:01] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:48:05,531 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:05] "GET /api/bulletins/view/marketing_comunicacao_jornalismo HTTP/1.1" 200 -
+2025-09-15 21:48:05,542 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:05] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:48:06,641 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:06] "GET /api/bulletins/view/recursos_humanos_gestao_pessoas HTTP/1.1" 200 -
+2025-09-15 21:48:06,645 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:06] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:48:10,987 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:10] "GET /api/bulletins/view/marketing_comunicacao_jornalismo HTTP/1.1" 200 -
+2025-09-15 21:48:10,994 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:10] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:48:14,948 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:14] "GET /api/bulletins/view/direito_corporativo_tributario_trabalhista HTTP/1.1" 200 -
+2025-09-15 21:48:14,953 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:14] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:48:31,909 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:48:31] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:49:01,912 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:49:01] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:49:31,907 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:49:31] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:49:52,906 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:49:52] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:49:54,636 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:49:54] "GET /api/bulletins/view/direito_corporativo_tributario_trabalhista HTTP/1.1" 200 -
+2025-09-15 21:49:54,659 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:49:54] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-15 21:50:01,908 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:50:01] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-15 21:50:32,093 - werkzeug - INFO - 127.0.0.1 - - [15/Sep/2025 21:50:32] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:15:35,846 - __main__ - INFO - (Re)criando template HTML...
+2025-09-16 01:15:35,848 - __main__ - INFO - Template HTML criado com sucesso
+2025-09-16 01:15:35,856 - __main__ - INFO - Visualizador inicializado em 127.0.0.1:5000
+2025-09-16 01:15:35,856 - __main__ - INFO - Iniciando servidor web em 127.0.0.1:5000
+2025-09-16 01:15:35,906 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-16 01:15:35,907 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-16 01:15:51,938 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:15:51] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:16:21,941 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:16:21] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:16:51,948 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:16:51] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:17:21,954 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:17:21] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:17:51,931 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:17:51] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:18:21,949 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:18:21] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:18:39,114 - __main__ - INFO - (Re)criando template HTML...
+2025-09-16 01:18:39,116 - __main__ - INFO - Template HTML criado com sucesso
+2025-09-16 01:18:39,125 - __main__ - INFO - Visualizador inicializado em 127.0.0.1:5000
+2025-09-16 01:18:39,125 - __main__ - INFO - Iniciando servidor web em 127.0.0.1:5000
+2025-09-16 01:18:39,154 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-09-16 01:18:39,154 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-09-16 01:18:45,529 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:18:45] "GET / HTTP/1.1" 200 -
+2025-09-16 01:18:45,669 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:18:45] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:18:47,403 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:18:47] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-16 01:18:51,067 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:18:51] "GET /api/stats HTTP/1.1" 200 -
+2025-09-16 01:19:10,630 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:19:10] "POST /api/email/send-latest HTTP/1.1" 200 -
+2025-09-16 01:19:15,651 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:19:15] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:19:46,084 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:19:46] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:20:16,111 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:20:16] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:20:46,090 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:20:46] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:21:08,258 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:21:08] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-16 01:21:15,665 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:21:15] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:21:45,665 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:21:45] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:22:15,658 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:22:15] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:22:45,665 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:22:45] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:23:15,663 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:23:15] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:23:39,502 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:23:39] "GET / HTTP/1.1" 200 -
+2025-09-16 01:23:39,600 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:23:39] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:23:40,622 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:23:40] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-16 01:23:49,143 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:23:49] "POST /api/email/send-latest HTTP/1.1" 200 -
+2025-09-16 01:24:10,079 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:24:10] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:24:40,076 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:24:40] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:25:10,081 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:25:10] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:25:40,081 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:25:40] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:26:10,082 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:26:10] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:26:40,081 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:26:40] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:27:28,093 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:27:28] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:28:28,093 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:28:28] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:29:28,098 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:29:28] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:30:25,734 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:30:25] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:30:27,421 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:30:27] "GET / HTTP/1.1" 200 -
+2025-09-16 01:30:27,531 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:30:27] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:30:29,704 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:30:29] "GET /api/segmentation_results HTTP/1.1" 200 -
+2025-09-16 01:30:39,588 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:30:39] "POST /api/email/send-latest HTTP/1.1" 200 -
+2025-09-16 01:30:58,090 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:30:58] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:31:28,085 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:31:28] "GET /api/collection_results HTTP/1.1" 200 -
+2025-09-16 01:31:58,091 - werkzeug - INFO - 127.0.0.1 - - [16/Sep/2025 01:31:58] "GET /api/collection_results HTTP/1.1" 200 -

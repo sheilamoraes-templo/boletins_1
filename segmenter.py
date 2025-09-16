@@ -64,7 +64,9 @@ class NewsSegmenter:
             selection_by_segment = {}
             for seg_key in self.segments_config.keys():
                 ranked = self._rank_segment(seg_key, segmented.get(seg_key, []))
-                selection_by_segment[seg_key] = ranked[:Config.MAX_ARTICLES_PER_SEGMENT]
+                # aplica filtro final de palavras-chave solicitadas
+                filtered = self._apply_final_keywords_filter(ranked)
+                selection_by_segment[seg_key] = filtered[:Config.MAX_ARTICLES_PER_SEGMENT]
 
             stats = {
                 'total_articles': len(articles),
@@ -264,6 +266,41 @@ class NewsSegmenter:
                 if len(selected) >= Config.MAX_ARTICLES_PER_SEGMENT:
                     break
         return selected
+
+    def _apply_final_keywords_filter(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Filtro final obrigatório por palavras-chave específicas.
+        - aceita se contiver "inteligencia artificial" (sem acento) ou "inteligência artificial" (com acento)
+        - ou contiver " IA " (com espaços, case-insensitive) em qualquer parte
+        Se retornar menos de 15, completa com os demais preservando ordem.
+        """
+        try:
+            if not items:
+                return []
+            phrases = ['inteligencia artificial', 'inteligência artificial']
+            import re as _re
+            ia_spaced = _re.compile(r"(^|\W)ia(\W|$)", _re.IGNORECASE)
+
+            def matches(a: Dict[str, Any]) -> bool:
+                text = ' '.join([a.get('title') or '', a.get('summary') or '', a.get('content') or ''])
+                tl = text.lower()
+                for ph in phrases:
+                    if ph in tl:
+                        return True
+                return bool(ia_spaced.search(text))
+
+            preferred: List[Dict[str, Any]] = [a for a in items if matches(a)]
+            if len(preferred) >= Config.MAX_ARTICLES_PER_SEGMENT:
+                return preferred
+            seen = set(id(a) for a in preferred)
+            for a in items:
+                if id(a) in seen:
+                    continue
+                preferred.append(a)
+                if len(preferred) >= Config.MAX_ARTICLES_PER_SEGMENT:
+                    break
+            return preferred
+        except Exception:
+            return items
     
     def save_results(self, results: Dict[str, Any], filename: str = None):
         try:

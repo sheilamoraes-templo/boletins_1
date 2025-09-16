@@ -642,21 +642,12 @@
             const container = document.getElementById(containerId);
             container.innerHTML = '<div class="loading">Carregando...</div>';
             try {
-                const [bulletinResp, segResp] = await Promise.all([
-                    fetch(`/api/bulletins/view/${segKey}`),
-                    fetch('/api/segmentation_results')
-                ]);
-                const bulletinResult = await bulletinResp.json();
+                const segResp = await fetch('/api/segmentation_results');
                 const segResult = await segResp.json();
-                if (!bulletinResult.success) {
-                    container.innerHTML = `<div class="error">${bulletinResult.error || 'Boletim não encontrado'}</div>`;
-                    return;
-                }
                 if (!segResult.success) {
                     container.innerHTML = `<div class="error">${segResult.error || 'Dados de segmentação não encontrados'}</div>`;
                     return;
                 }
-                const bulletin = bulletinResult.bulletin;
                 const data = segResult.data;
                 const selection = (data.selection_by_segment || {});
                 const segmented = (data.segmented_results || {});
@@ -664,12 +655,8 @@
                 const segmentedList = segmented[segKey] || [];
 
                 let html = '';
-                // Boletim (inline, copiável)
-                html += '<h4>Boletim</h4>';
-                html += `<div class="stat-card" style="margin-bottom:15px; border-left-color:#28a745;">${bulletin.html_content}</div>`;
-
                 // Lista resumida (títulos e links) dos Top 15
-                html += '<h4 style="margin-top:20px;">Top 15 Selecionados (títulos e links)</h4>';
+                html += '<h4 style="margin-top:0;">Top 15 Selecionados (títulos e links)</h4>';
                 if (!selectedList.length) {
                     html += '<div class="error">Nenhum selecionado</div>';
                 } else {
@@ -752,60 +739,56 @@
         
         async function loadPipelineData() {
             const container = document.getElementById('pipelineResults');
-            
             try {
-                const response = await fetch('/api/pipeline_results');
-                const result = await response.json();
-                
+                const resp = await fetch('/api/stats');
+                const result = await resp.json();
                 if (!result.success) {
                     container.innerHTML = `<div class="error">Erro ao carregar dados do pipeline: ${result.error}</div>`;
                     return;
                 }
-                
-                const data = result.data;
-                const summary = data.summary || {};
-                const pipelineStats = data.pipeline_stats || {};
-                
-                const collected = pipelineStats.collected_articles || 0;
-                const segmented = pipelineStats.segmented_articles || 0;
-                const segStats = pipelineStats.segments_stats || {};
+                const stats = result.stats || {};
+                const col = stats.collection_stats || {};
+                const seg = stats.segmentation_stats || {};
+                const gen = stats.generation_stats || {};
+                const srcq = stats.source_quality || {};
 
                 let html = `
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <h3>Status</h3>
-                            <div class="value">${data.status === 'success' ? '✅ Sucesso' : (data.status === 'partial' ? 'ℹ️ Parcial' : '⚠️ Sem dados')}</div>
-                            <div class="label">status da execução</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Tempo Total</h3>
-                            <div class="value">${summary.execution_time || 0}s</div>
-                            <div class="label">tempo de execução</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Boletins Gerados</h3>
-                            <div class="value">${summary.bulletins_generated || 0}</div>
-                            <div class="label">boletins criados</div>
-                        </div>
-                        <div class="stat-card">
                             <h3>Coletados</h3>
-                            <div class="value">${collected}</div>
+                            <div class="value">${col.total_articles || 0}</div>
                             <div class="label">artigos coletados</div>
                         </div>
                         <div class="stat-card">
                             <h3>Segmentados</h3>
-                            <div class="value">${segmented}</div>
+                            <div class="value">${seg.total_articles || 0}</div>
                             <div class="label">artigos segmentados</div>
                         </div>
                         <div class="stat-card">
-                            <h3>Data de Execução</h3>
-                            <div class="value">${new Date(data.execution_date).toLocaleDateString('pt-BR')}</div>
-                            <div class="label">última execução</div>
+                            <h3>IA aprovadas</h3>
+                            <div class="value">${seg.ai_filtered || col.ai_articles || 0}</div>
+                            <div class="label">passaram no filtro IA</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Deduplicação</h3>
+                            <div class="value">URL: ${col.duplicates_removed_url||0} / Título: ${col.duplicates_removed_title||0}</div>
+                            <div class="label">removidas</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Fontes</h3>
+                            <div class="value">${col.successful_feeds || 0}</div>
+                            <div class="label">fontes processadas</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Atualização</h3>
+                            <div class="value">${new Date(stats.timestamp || Date.now()).toLocaleString('pt-BR')}</div>
+                            <div class="label">última atualização</div>
                         </div>
                     </div>
                 `;
 
-                // Detalhe por segmento (artigos usados no Top15 de cada boletim)
+                // Detalhe por segmento
+                const segStats = (seg.segments_stats || {});
                 const segKeys = Object.keys(segStats);
                 if (segKeys.length) {
                     html += '<h4 style="margin-top:20px;">Por segmento</h4>';
@@ -813,14 +796,27 @@
                     html += '<ul style="margin-left:16px;">';
                     segKeys.forEach(k => {
                         const v = segStats[k] || 0;
-                        html += `<li><strong>${k}</strong>: ${v} artigos utilizados</li>`;
+                        html += `<li><strong>${k}</strong>: ${v} artigos segmentados</li>`;
                     });
                     html += '</ul>';
                     html += '</div>';
                 }
-                
+
+                // Qualidade por fonte
+                const srcKeys = Object.keys(srcq);
+                if (srcKeys.length) {
+                    html += '<h4 style="margin-top:20px;">Qualidade por fonte</h4>';
+                    html += '<div class="stat-card" style="margin-top:10px;">';
+                    html += '<ul style="margin-left:16px;">';
+                    srcKeys.forEach(k => {
+                        const info = srcq[k] || {};
+                        html += `<li><strong>${k}</strong>: coletados ${info.collected||0} • Top15 ${info.selected_top15||0} • taxa ${info.selection_rate||0}</li>`;
+                    });
+                    html += '</ul>';
+                    html += '</div>';
+                }
+
                 container.innerHTML = html;
-                
             } catch (error) {
                 container.innerHTML = `<div class="error">Erro de conexão: ${error.message}</div>`;
             }

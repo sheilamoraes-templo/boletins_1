@@ -46,7 +46,11 @@ class FullContentExtractor:
             'canaltech.com.br': ['article', '.content', '.article-content'],
             'ainews.net.br': ['article', '.entry-content', '.single-content', '.post-content'],
             'tiinside.com.br': ['article', '.td-post-content', '.tdb_single_content', '.entry-content'],
-            'www.bbc.com': ['article', 'main', '.ssrcss-uf6wea-RichTextComponentWrapper', '.ssrcss-1q0x1qg-Paragraph']
+            'www.bbc.com': ['article', 'main', '.ssrcss-uf6wea-RichTextComponentWrapper', '.ssrcss-1q0x1qg-Paragraph'],
+            'www.infomoney.com.br': ['article', '.article__content', '.single__content', '.single__text', '.page-content'],
+            'iaexpert.academy': ['article', '.entry-content', '.post-content', '.single-post', 'main'],
+            'gauchazh.clicrbs.com.br': ['article', 'main', '.content', '.article'],
+            'neofeed.com.br': ['article', '.td-post-content', '.entry-content', '.content']
         }
         self.selenium_pages_used = 0
         self._driver = None
