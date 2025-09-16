@@ -18,6 +18,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Dict, Any, List
 from datetime import datetime
+import sys
+from pathlib import Path
+
+# Garante que o diretório raiz do projeto esteja no PYTHONPATH ao rodar via GitHub Actions
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
 from dotenv import load_dotenv
 
