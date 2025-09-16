@@ -17,6 +17,7 @@ import logging
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Dict, Any, List
+from datetime import datetime
 
 from dotenv import load_dotenv
 
@@ -58,7 +59,7 @@ def _build_selection_email_html(selection_by_segment: Dict[str, List[Dict[str, A
     parts: List[str] = []
     parts.append('<div style="font-family:Segoe UI,Arial,sans-serif; line-height:1.5; color:#222;">')
     parts.append('<h1 style="margin:0 0 10px 0;">Top 15 integrais por segmento</h1>')
-    parts.append(f'<div style="color:#666; font-size:13px;">Data: {os.popen("powershell -NoProfile -Command Get-Date -Format \"dd/MM/yyyy HH:mm\"").read().strip()}</div>')
+    parts.append(f'<div style="color:#666; font-size:13px;">Data: {datetime.now().strftime("%d/%m/%Y %H:%M")}</div>')
 
     for seg in seg_order:
         arts = selection_by_segment.get(seg) or []
