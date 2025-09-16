@@ -9,6 +9,9 @@ import re
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from flask import Flask, render_template, jsonify, request, Response
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from flask_cors import CORS
 
 from config import Config
@@ -333,27 +336,145 @@ class BoletinsVisualizer:
 
         @self.app.route('/api/email/send-latest', methods=['POST'])
         def send_latest_email():
-            """Envia por email os últimos boletins gerados"""
+            """Envia por email os Top 15 integrais por segmento (Sem IA),
+            montando o HTML a partir do latest_selection.json.
+            Body opcional: { "recipients": ["a@x","b@y"] }
+            """
             try:
-                latest_file = f"{Config.OUTPUT_DIR}/latest_bulletins.json"
-                if not os.path.exists(latest_file):
-                    return jsonify({'success': False, 'error': 'Nenhum boletim encontrado'}), 404
-                with open(latest_file, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                # Permite override de recipients via payload JSON { recipients: [..] }
-                recipients_override = None
+                selection_file = f"{Config.OUTPUT_DIR}/latest_selection.json"
+                if not os.path.exists(selection_file):
+                    return jsonify({'success': False, 'error': 'Seleção Top15 não encontrada. Rode a segmentação antes.'}), 404
+
+                with open(selection_file, 'r', encoding='utf-8') as f:
+                    sel_data = json.load(f) or {}
+                selection = sel_data.get('selection_by_segment') or {}
+                if not selection:
+                    return jsonify({'success': False, 'error': 'selection_by_segment vazio.'}), 400
+
                 payload = request.get_json(silent=True) or {}
-                recs = payload.get('recipients')
-                if isinstance(recs, list) and recs:
-                    recipients_override = [str(x).strip() for x in recs if str(x).strip()]
-                try:
-                    sender = EmailSender(recipients_override=recipients_override)
-                except Exception as e:
-                    return jsonify({'success': False, 'error': f'Configuração de email inválida: {e}'}), 400
-                result = sender.send_bulletins(data)
-                if result.get('status') == 'success':
-                    return jsonify({'success': True, 'result': result})
-                return jsonify({'success': False, 'error': result.get('error','Erro no envio')}), 500
+                recs_override = payload.get('recipients')
+
+                # Destinatários e credenciais
+                smtp_server = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
+                smtp_port = int(os.getenv('SMTP_PORT', '587'))
+                email_user = os.getenv('EMAIL_USER')
+                email_password = os.getenv('EMAIL_PASSWORD')
+                if isinstance(recs_override, list) and recs_override:
+                    recipients = [str(x).strip() for x in recs_override if str(x).strip()]
+                else:
+                    recipients = [r.strip() for r in (os.getenv('EMAIL_RECIPIENTS') or '').split(',') if r.strip()]
+
+                missing = []
+                if not email_user: missing.append('EMAIL_USER')
+                if not email_password: missing.append('EMAIL_PASSWORD')
+                if not recipients: missing.append('EMAIL_RECIPIENTS')
+                if missing:
+                    return jsonify({'success': False, 'error': 'Configuração de email inválida: ' + ', '.join(missing)}), 400
+
+                def esc(t: str) -> str:
+                    return (t or '').replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+
+                # Monta HTML com 15 integrais por segmento (layout organizado)
+                seg_order = [
+                    'marketing_comunicacao_jornalismo',
+                    'direito_corporativo_tributario_trabalhista',
+                    'recursos_humanos_gestao_pessoas',
+                ]
+                seg_names = {k: (Config.SEGMENTS.get(k, {}).get('name') or k) for k in seg_order}
+
+                # Cabeçalho e estilos
+                from datetime import datetime as _dt
+                date_str = _dt.now().strftime('%d/%m/%Y %H:%M')
+                parts: List[str] = []
+                parts.append('<!DOCTYPE html>')
+                parts.append('<html lang="pt-BR">')
+                parts.append('<head>')
+                parts.append('<meta charset="UTF-8">')
+                parts.append('<meta name="viewport" content="width=device-width, initial-scale=1.0">')
+                parts.append('<title>Top 15 integrais por segmento</title>')
+                parts.append('<style>')
+                parts.append('body{font-family:Segoe UI,Arial,sans-serif;line-height:1.6;color:#222;margin:0;padding:0;background:#ffffff;}')
+                parts.append('.container{max-width:860px;margin:0 auto;padding:24px;}')
+                parts.append('.header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:20px;border-radius:10px;margin-bottom:18px;}')
+                parts.append('.header h1{margin:0 0 6px 0;font-size:22px;} .header .meta{font-size:12px;opacity:.9;}')
+                parts.append('.toc{background:#f8f9fa;border:1px solid #e3e6ef;border-radius:8px;padding:12px;margin:12px 0 18px 0;}')
+                parts.append('.toc h3{margin:0 0 8px 0;font-size:14px;color:#555;} .toc a{color:#3b5bdd;text-decoration:none;} .toc a:hover{text-decoration:underline;}')
+                parts.append('.segment{margin:18px 0;} .segment h2{margin:0 0 10px 0;font-size:18px;color:#333;}')
+                parts.append('.card{background:#f8f9fa;border-left:4px solid #667eea;padding:12px 14px;margin:10px 0;border-radius:6px;}')
+                parts.append('.title{font-weight:700;margin-bottom:4px;} .meta{color:#666;font-size:12px;}')
+                parts.append('.content{margin-top:8px;white-space:pre-wrap;font-family:Segoe UI,Arial,sans-serif;}')
+                parts.append('.refs{margin-top:10px;} .refs ol{margin:6px 0 0 18px;} .refs li{margin:3px 0;}')
+                parts.append('.footer{color:#666;font-size:12px;margin-top:18px;text-align:center;}')
+                parts.append('</style>')
+                parts.append('</head>')
+                parts.append('<body>')
+                parts.append('<div class="container">')
+                parts.append('<div class="header">')
+                parts.append('<h1>Top 15 integrais por segmento</h1>')
+                parts.append(f'<div class="meta">Gerado em {esc(date_str)} — pronto para copiar e colar em uma LLM</div>')
+                parts.append('</div>')
+
+                # Sumário com âncoras
+                parts.append('<div class="toc">')
+                parts.append('<h3>Sumário</h3>')
+                toc_items = []
+                for seg in seg_order:
+                    arts = selection.get(seg) or []
+                    if not arts:
+                        continue
+                    toc_items.append(f'<a href="#seg-{seg}">{esc(seg_names[seg])}</a> ({len(arts)} artigos)')
+                if toc_items:
+                    parts.append('<div>' + ' · '.join(toc_items) + '</div>')
+                parts.append('</div>')
+
+                # Segmentos
+                for seg in seg_order:
+                    arts = selection.get(seg) or []
+                    if not arts:
+                        continue
+                    parts.append(f'<div class="segment" id="seg-{seg}">')
+                    parts.append(f'<h2>{esc(seg_names[seg])}</h2>')
+                    for i, a in enumerate(arts, 1):
+                        title = esc(a.get('title') or '')
+                        src = esc(a.get('source') or '')
+                        dt = esc(a.get('published') or '')
+                        url = a.get('url') or ''
+                        content = esc(a.get('content') or '')
+                        parts.append('<div class="card">')
+                        parts.append(f'<div class="title">{i}. {title}</div>')
+                        parts.append(f'<div class="meta">Fonte: {src} • Data: {dt} • <a href="{url}" target="_blank">{esc(url)}</a></div>')
+                        parts.append(f'<div class="content">{content}</div>')
+                        parts.append('</div>')
+                    # Referências
+                    parts.append('<div class="refs"><strong>Referências</strong><ol>')
+                    for i, a in enumerate(arts, 1):
+                        title = esc(a.get('title') or '')
+                        url = a.get('url') or ''
+                        src = esc(a.get('source') or '')
+                        dt = esc(a.get('published') or '')
+                        parts.append(f'<li>{title} — {src} — {dt} — <a href="{url}" target="_blank">{esc(url)}</a></li>')
+                    parts.append('</ol></div>')
+                    parts.append('</div>')
+
+                parts.append('<div class="footer">Boletins IA (Sem IA) — este email contém o conteúdo integral dos 15 artigos por segmento, em formato copiável.</div>')
+                parts.append('</div>')  # container
+                parts.append('</body></html>')
+                html_body = '\n'.join(parts)
+
+                # Envia
+                msg = MIMEMultipart('alternative')
+                msg['From'] = email_user
+                msg['To'] = ', '.join(recipients)
+                msg['Subject'] = f'Top 15 integrais por segmento (Sem IA) — {date_str}'
+                msg.attach(MIMEText(html_body, 'html', 'utf-8'))
+
+                server = smtplib.SMTP(smtp_server, smtp_port)
+                server.starttls()
+                server.login(email_user, email_password)
+                server.sendmail(email_user, recipients, msg.as_string())
+                server.quit()
+
+                return jsonify({'success': True, 'result': {'total_recipients': len(recipients)}})
             except Exception as e:
                 return jsonify({'success': False, 'error': str(e)}), 500
 
