@@ -20,27 +20,26 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        working-directory: ./boletins_1
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r boletins_1/requirements.txt
 
       - name: Prepare env
-        working-directory: ./boletins_1
         run: |
-          cp env_example.txt .env
+          cp boletins_1/env_example.txt .env
         shell: bash
 
       - name: Run weekly task (collect, segment and email)
-        working-directory: ./boletins_1
         env:
           SMTP_SERVER: ${{ vars.SMTP_SERVER || secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ vars.SMTP_PORT || secrets.SMTP_PORT }}
           EMAIL_USER: ${{ vars.EMAIL_USER || secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          # Concatena EMAIL_RECIPIENTS existentes com o novo destinatário
-          EMAIL_RECIPIENTS: ${{ (vars.EMAIL_RECIPIENTS && (vars.EMAIL_RECIPIENTS != '' && format('{0},{1}', vars.EMAIL_RECIPIENTS, 'vincenzo.zandona@templo.cc') || 'vincenzo.zandona@templo.cc')) || (secrets.EMAIL_RECIPIENTS && (secrets.EMAIL_RECIPIENTS != '' && format('{0},{1}', secrets.EMAIL_RECIPIENTS, 'vincenzo.zandona@templo.cc') || 'vincenzo.zandona@templo.cc')) || 'vincenzo.zandona@templo.cc' }}
         run: |
-          python scripts/weekly_task.py
+          RECIP='vincenzo.zandona@templo.cc'
+          if [ -n "${{ vars.EMAIL_RECIPIENTS }}" ]; then RECIP="${{ vars.EMAIL_RECIPIENTS }},$RECIP"; fi
+          if [ -n "${{ secrets.EMAIL_RECIPIENTS }}" ]; then RECIP="${{ secrets.EMAIL_RECIPIENTS }},$RECIP"; fi
+          export EMAIL_RECIPIENTS="$RECIP"
+          python boletins_1/scripts/weekly_task.py
 
 
