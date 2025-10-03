@@ -22,11 +22,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r boletins_1/requirements.txt
+          pip install -r requirements.txt
 
       - name: Prepare env
         run: |
-          cp boletins_1/env_example.txt .env
+          cp env_example.txt .env
         shell: bash
 
       - name: Run weekly task (collect, segment and email)
@@ -40,6 +40,6 @@ jobs:
           if [ -n "${{ vars.EMAIL_RECIPIENTS }}" ]; then RECIP="${{ vars.EMAIL_RECIPIENTS }},$RECIP"; fi
           if [ -n "${{ secrets.EMAIL_RECIPIENTS }}" ]; then RECIP="${{ secrets.EMAIL_RECIPIENTS }},$RECIP"; fi
           export EMAIL_RECIPIENTS="$RECIP"
-          python boletins_1/scripts/weekly_task.py
+          python scripts/weekly_task.py
 
 

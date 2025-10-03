@@ -1,8 +1,6 @@
-name: Weekly Top15 (Sem IA)
+name: Weekly Top15 (manual)
 
 on:
-  schedule:
-    - cron: '0 13 * * 1'  # Segunda 13:00 UTC
   workflow_dispatch:
 
 jobs:
