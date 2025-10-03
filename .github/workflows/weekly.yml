@@ -1,0 +1,46 @@
+name: Weekly collection and email (Sem IA)
+
+on:
+  schedule:
+    # Segunda-feira 14:00 UTC = 11:00 BRT
+    - cron: '0 14 * * 1'
+  workflow_dispatch:
+
+jobs:
+  run-weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: ./boletins_1
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Prepare env
+        working-directory: ./boletins_1
+        run: |
+          cp env_example.txt .env
+        shell: bash
+
+      - name: Run weekly task (collect, segment and email)
+        working-directory: ./boletins_1
+        env:
+          SMTP_SERVER: ${{ vars.SMTP_SERVER || secrets.SMTP_SERVER }}
+          SMTP_PORT: ${{ vars.SMTP_PORT || secrets.SMTP_PORT }}
+          EMAIL_USER: ${{ vars.EMAIL_USER || secrets.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          # Concatena EMAIL_RECIPIENTS existentes com o novo destinatário
+          EMAIL_RECIPIENTS: ${{ (vars.EMAIL_RECIPIENTS && (vars.EMAIL_RECIPIENTS != '' && format('{0},{1}', vars.EMAIL_RECIPIENTS, 'vincenzo.zandona@templo.cc') || 'vincenzo.zandona@templo.cc')) || (secrets.EMAIL_RECIPIENTS && (secrets.EMAIL_RECIPIENTS != '' && format('{0},{1}', secrets.EMAIL_RECIPIENTS, 'vincenzo.zandona@templo.cc') || 'vincenzo.zandona@templo.cc')) || 'vincenzo.zandona@templo.cc' }}
+        run: |
+          python scripts/weekly_task.py
+
+
