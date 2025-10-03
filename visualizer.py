@@ -2,6 +2,8 @@
 Visualizador web para resultados dos boletins
 """
 
+# sync: commit de garantia (sem impacto funcional)
+
 import json
 import logging
 import os
