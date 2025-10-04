@@ -32,10 +32,15 @@ jobs:
       - name: Run weekly task (collect, segment and email)
         env:
           SMTP_SERVER: ${{ vars.SMTP_SERVER || secrets.SMTP_SERVER }}
-          SMTP_PORT: ${{ vars.SMTP_PORT || secrets.SMTP_PORT }}
           EMAIL_USER: ${{ vars.EMAIL_USER || secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         run: |
+          # Define SMTP_PORT com fallback seguro
+          PORT=''
+          if [ -n "${{ vars.SMTP_PORT }}" ]; then PORT="${{ vars.SMTP_PORT }}"; fi
+          if [ -z "$PORT" ] && [ -n "${{ secrets.SMTP_PORT }}" ]; then PORT="${{ secrets.SMTP_PORT }}"; fi
+          if [ -z "$PORT" ]; then PORT='587'; fi
+          export SMTP_PORT="$PORT"
           RECIP='vincenzo.zandona@templo.cc'
           if [ -n "${{ vars.EMAIL_RECIPIENTS }}" ]; then RECIP="${{ vars.EMAIL_RECIPIENTS }},$RECIP"; fi
           if [ -n "${{ secrets.EMAIL_RECIPIENTS }}" ]; then RECIP="${{ secrets.EMAIL_RECIPIENTS }},$RECIP"; fi
