@@ -281,8 +281,8 @@ class Config:
     
     # Configurações de email
     EMAIL_CONFIG = {
-        'smtp_server': os.getenv('SMTP_SERVER') or 'smtp.gmail.com',
-        'smtp_port': int(os.getenv('SMTP_PORT') or '587'),
+        'smtp_server': os.getenv('SMTP_SERVER', 'smtp.gmail.com'),
+        'smtp_port': int(os.getenv('SMTP_PORT', '587')),
         'email_user': os.getenv('EMAIL_USER', ''),
         'email_password': os.getenv('EMAIL_PASSWORD', ''),
         'recipients': os.getenv('EMAIL_RECIPIENTS', '').split(',') if os.getenv('EMAIL_RECIPIENTS') else []
@@ -290,8 +290,8 @@ class Config:
     
     # Configurações de coleta de email
     EMAIL_COLLECTION_CONFIG = {
-        'imap_server': os.getenv('IMAP_SERVER') or 'imap.gmail.com',
-        'imap_port': int(os.getenv('IMAP_PORT') or '993'),
+        'imap_server': os.getenv('IMAP_SERVER', 'imap.gmail.com'),
+        'imap_port': int(os.getenv('IMAP_PORT', '993')),
         'email_user': os.getenv('EMAIL_USER', ''),
         'email_password': os.getenv('EMAIL_PASSWORD', ''),
         'folder': 'INBOX',  # Caixa de entrada
