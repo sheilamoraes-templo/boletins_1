@@ -2,7 +2,8 @@ name: Weekly newsletter
 
 on:
   schedule:
-    - cron: "0 16 * * *"
+    # Segundas 13:00 UTC (equivalente a 10:00 em America/Sao_Paulo na maior parte do ano)
+    - cron: "0 13 * * 1"
   workflow_dispatch: {}
 
 jobs:

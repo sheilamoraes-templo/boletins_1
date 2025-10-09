@@ -20,6 +20,7 @@ from typing import Dict, Any, List
 from datetime import datetime
 import sys
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 # Garante que o diretório raiz do projeto esteja no PYTHONPATH ao rodar via GitHub Actions
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -55,7 +56,7 @@ def _html_escape(text: str) -> str:
 
 def _build_segment_email_html(seg_key: str, articles: List[Dict[str, Any]]) -> str:
     seg_name = (Config.SEGMENTS.get(seg_key, {}).get('name')) or seg_key
-    date_str = datetime.now().strftime('%d/%m/%Y %H:%M')
+    date_str = datetime.now(ZoneInfo("America/Sao_Paulo")).strftime('%d/%m/%Y %H:%M')
 
     parts: List[str] = []
     parts.append('<!DOCTYPE html>')
@@ -179,7 +180,7 @@ def run_weekly() -> None:
     ]
     seg_names = {k: (Config.SEGMENTS.get(k, {}).get('name') or k) for k in seg_order}
     sent_count = 0
-    date_str = datetime.now().strftime('%d/%m/%Y %H:%M')
+    date_str = datetime.now(ZoneInfo("America/Sao_Paulo")).strftime('%d/%m/%Y %H:%M')
     for seg in seg_order:
         arts = selection.get(seg) or []
         if not arts:
